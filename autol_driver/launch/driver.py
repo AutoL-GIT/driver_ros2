@@ -6,7 +6,6 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 import launch
 
-
 ################### user configure parameters for ros2 start ###################
 manufacture_id = 'autol'
 model_id = 'G32'

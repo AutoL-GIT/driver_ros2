@@ -46,7 +46,7 @@
 #### 2.1 Clone Autol ROS2 Driver source code
 
 ```bash
-$ git https://github.com/AutoL-GIT/driver_ros2.git
+$ git clone https://github.com/AutoL-GIT/driver_ros2.git
 ```
 
 #### 2.2 Colcon build Autol ROS Dirver2
