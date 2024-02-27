@@ -114,7 +114,7 @@ $ source install/setup.bash
 | input_type       | Set the source of LiDAR packets<br />0 -- Unused . Never set this parameter to 0.<br />1 -- LiDAR packets come frome on-line LiDAR<br />2 -- LiDAR packets come from a PCAP | 1             |
 | pcap_path        | The full path of the PCAP file. Valid if input_type = 2.     | " "           |
 | packet_per_frame | Set the num of packet per frame, recommended values 180.     | 180           |
-| frame_rate       | Set the frequency of point cloud publish Floating-point data type, recommended values 25.0 Hz. | 25 (unit: Hz) |
+| frame_rate       | Set the frequency of point cloud publish Floating-point data type. | 25 (unit: Hz) |
 | lidar_count      | Set the num of lidar                                         | 1             |
 | lidar_port_1     | Set the First Lidar communication packet port.               | 5001          |
 | lidar_port_2     | Set the Second Lidar communication packet port.              | 5002          |
