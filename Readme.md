@@ -10,7 +10,7 @@
 
 - Source Code: Download or Git Clone from GitHub ()
 
-  ![image-20240226133114437](/home/autol/.config/Typora/typora-user-images/image-20240226133114437.png)
+  
 
 ## 1. Preparation 
 
