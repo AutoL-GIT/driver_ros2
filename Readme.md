@@ -8,7 +8,7 @@
 
 - If needed by the client, intermediate data can be acquired for additional processing
 
-- Source Code: Download or Git Clone from GitHub ()
+- Source Code: Download or Git Clone from GitHub
 
   
 
