@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug-rclcpp(gbd)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/../install/${input:package}/lib/${input:package}/${input:node}",
+            "args": [],
+            "preLaunchTask": "colcon: build",
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "package",
+            "type": "promptString",
+            "description": "autol_driver",
+            "default": "autol_driver"
+        },
+        {
+            "id": "node",
+            "type": "promptString",
+            "description": "autol_driver_node",
+            "default": "autol_driver_node"
+        }
+    ]
+}

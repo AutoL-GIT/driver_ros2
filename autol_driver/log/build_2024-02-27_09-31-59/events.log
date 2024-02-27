@@ -1,0 +1,209 @@
+[0.000000] (-) TimerEvent: {}
+[0.000124] (autol_driver) JobQueued: {'identifier': 'autol_driver', 'dependencies': OrderedDict()}
+[0.000142] (autol_driver) JobStarted: {'identifier': 'autol_driver'}
+[0.024055] (autol_driver) JobProgress: {'identifier': 'autol_driver', 'progress': 'cmake'}
+[0.024177] (autol_driver) Command: {'cmd': ['/usr/local/bin/cmake', '/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver', '-DCMAKE_INSTALL_PREFIX=/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/install/autol_driver'], 'cwd': '/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/build/autol_driver', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('GURUMDDS_HOME', '/usr/share/gurumdds/cmake/../../..'), ('USER', 'autol'), ('LC_TIME', 'ko_KR.UTF-8'), ('XDG_SESSION_TYPE', 'x11'), ('GIT_ASKPASS', '/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('SHLVL', '2'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/rti.com/rti_connext_dds-6.0.1/lib/x64Linux4gcc7.3.0:/opt/rti.com/rti_connext_dds-6.0.1/bin:/opt/ros/humble/lib/x86_64-linux-gnu:/usr/share/gurumdds/cmake/../../../lib:/opt/ros/humble/lib::/usr/local/cuda-12.2/lib64'), ('HOME', '/home/autol'), ('CHROME_DESKTOP', 'code-url-handler.desktop'), ('TERM_PROGRAM_VERSION', '1.86.2'), ('DESKTOP_SESSION', 'ubuntu'), ('CONNEXTDDS_DIR', '/opt/rti.com/rti_connext_dds-6.0.1'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('NDDSHOME', '/opt/rti.com/rti_connext_dds-6.0.1'), ('VSCODE_GIT_ASKPASS_MAIN', '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('LC_MONETARY', 'ko_KR.UTF-8'), ('VSCODE_GIT_ASKPASS_NODE', '/usr/share/code/code'), ('DBUS_STARTER_BUS_TYPE', 'session'), ('SYSTEMD_EXEC_PID', '2510'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus,guid=df530686c044863e62bb3a6365dd2796'), ('COLORTERM', 'truecolor'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'autol'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'autol'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('PATH', '/home/autol/miniconda3/bin:/opt/rti.com/rti_connext_dds-6.0.1/lib/x64Linux4gcc7.3.0:/opt/rti.com/rti_connext_dds-6.0.1/bin:/opt/ros/humble/bin:/home/autol/miniconda3/bin:/home/autol/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/cuda-12.2/bin'), ('SESSION_MANAGER', 'local/autol-HP-Elite-Tower-800-G9-Desktop-PC:@/tmp/.ICE-unix/2510,unix/autol-HP-Elite-Tower-800-G9-Desktop-PC:/tmp/.ICE-unix/2510'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'ko_KR.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/309c748e_97ab_4142_bcce_5c72126ca2da'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('LC_TELEPHONE', 'ko_KR.UTF-8'), ('CUDARDIR', '/usr/local/cuda-12.2'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-116325fd72.sock'), ('GNOME_TERMINAL_SERVICE', ':1.125'), ('TERM_PROGRAM', 'vscode'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '10'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('SHELL', '/bin/bash'), ('LC_NAME', 'ko_KR.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'ko_KR.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('LC_IDENTIFICATION', 'ko_KR.UTF-8'), ('CONNEXTDDS_ARCH', 'x64Linux4gcc7.3.0'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/build/autol_driver'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('DBUS_STARTER_ADDRESS', 'unix:path=/run/user/1000/bus,guid=df530686c044863e62bb3a6365dd2796'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'ko_KR.UTF-8'), ('LC_PAPER', 'ko_KR.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.071445] (autol_driver) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.080283] (autol_driver) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++\n'}
+[0.099604] (-) TimerEvent: {}
+[0.122195] (autol_driver) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ -- works\n'}
+[0.123604] (autol_driver) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.165881] (autol_driver) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.194641] (autol_driver) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.195531] (autol_driver) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.197359] (autol_driver) StdoutLine: {'line': b'-- Found ament_cmake_auto: 1.3.7 (/opt/ros/humble/share/ament_cmake_auto/cmake)\n'}
+[0.199755] (-) TimerEvent: {}
+[0.273004] (autol_driver) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3.8 (found version "3.8.18") found components: Interpreter \n'}
+[0.299935] (-) TimerEvent: {}
+[0.400269] (-) TimerEvent: {}
+[0.452230] (autol_driver) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.460985] (autol_driver) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.478477] (autol_driver) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.500373] (-) TimerEvent: {}
+[0.513811] (autol_driver) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.563040] (autol_driver) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.600484] (-) TimerEvent: {}
+[0.700763] (-) TimerEvent: {}
+[0.731030] (autol_driver) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[0.734900] (autol_driver) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[0.800846] (-) TimerEvent: {}
+[0.866969] (autol_driver) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so   \n'}
+[0.897451] (autol_driver) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[0.900899] (-) TimerEvent: {}
+[0.959896] (autol_driver) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.975088] (autol_driver) StdoutLine: {'line': b'-- Looking for C++ include pthread.h\n'}
+[1.001018] (-) TimerEvent: {}
+[1.021851] (autol_driver) StdoutLine: {'line': b'-- Looking for C++ include pthread.h - found\n'}
+[1.022237] (autol_driver) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[1.069986] (autol_driver) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[1.071730] (autol_driver) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[1.101101] (-) TimerEvent: {}
+[1.201334] (-) TimerEvent: {}
+[1.301615] (-) TimerEvent: {}
+[1.401897] (-) TimerEvent: {}
+[1.502133] (-) TimerEvent: {}
+[1.602395] (-) TimerEvent: {}
+[1.702646] (-) TimerEvent: {}
+[1.802943] (-) TimerEvent: {}
+[1.903196] (-) TimerEvent: {}
+[2.003413] (-) TimerEvent: {}
+[2.103656] (-) TimerEvent: {}
+[2.203923] (-) TimerEvent: {}
+[2.304353] (-) TimerEvent: {}
+[2.322137] (autol_driver) StdoutLine: {'line': b"-- Checking for module 'eigen3'\n"}
+[2.331357] (autol_driver) StdoutLine: {'line': b'--   Found eigen3, version 3.4.0\n'}
+[2.347465] (autol_driver) StdoutLine: {'line': b'-- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") \n'}
+[2.347579] (autol_driver) StdoutLine: {'line': b'-- Eigen found (include: /usr/include/eigen3, version: 3.4.0)\n'}
+[2.375226] (autol_driver) StdoutLine: {'line': b'-- Found Boost: /usr/local/lib/cmake/Boost-1.84.0/BoostConfig.cmake (found suitable version "1.84.0", minimum required is "1.65.0") found components: system filesystem date_time iostreams serialization \n'}
+[2.391758] (autol_driver) StdoutLine: {'line': b"-- Checking for module 'flann'\n"}
+[2.402938] (autol_driver) StdoutLine: {'line': b'--   Found flann, version 1.9.1\n'}
+[2.404438] (-) TimerEvent: {}
+[2.426602] (autol_driver) StdoutLine: {'line': b'-- Found FLANN: /usr/lib/x86_64-linux-gnu/libflann_cpp.so  \n'}
+[2.426938] (autol_driver) StdoutLine: {'line': b'-- FLANN found (include: /usr/include, lib: /usr/lib/x86_64-linux-gnu/libflann_cpp.so)\n'}
+[2.504635] (-) TimerEvent: {}
+[2.524515] (autol_driver) StdoutLine: {'line': b'-- Found GLEW: /usr/lib/x86_64-linux-gnu/libGLEW.so  \n'}
+[2.532747] (autol_driver) StdoutLine: {'line': b'-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so  found components: OpenGL GLX \n'}
+[2.542794] (autol_driver) StdoutLine: {'line': b'-- Could NOT find MPI (missing: MPI_C_FOUND C) \n'}
+[2.542885] (autol_driver) StdoutLine: {'line': b"    Reason given by package: MPI component 'C' was requested, but language C is not enabled.  \n"}
+[2.542914] (autol_driver) StdoutLine: {'line': b'\n'}
+[2.545853] (autol_driver) StdoutLine: {'line': b'-- Found JsonCpp: /usr/lib/x86_64-linux-gnu/libjsoncpp.so (found suitable version "1.9.5", minimum required is "0.7.0") \n'}
+[2.558862] (autol_driver) StdoutLine: {'line': b'-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11") \n'}
+[2.581910] (autol_driver) StdoutLine: {'line': b'-- Found PNG: /usr/lib/x86_64-linux-gnu/libpng.so (found version "1.6.37") \n'}
+[2.604751] (-) TimerEvent: {}
+[2.605102] (autol_driver) StdoutLine: {'line': b'-- Found Eigen3: /usr/include/eigen3 (found version "3.4.0") \n'}
+[2.684082] (autol_driver) StdoutLine: {'line': b'-- Found X11: /usr/include   \n'}
+[2.684472] (autol_driver) StdoutLine: {'line': b'-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so\n'}
+[2.704816] (-) TimerEvent: {}
+[2.764443] (autol_driver) StdoutLine: {'line': b'-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found\n'}
+[2.764637] (autol_driver) StdoutLine: {'line': b'-- Looking for gethostbyname\n'}
+[2.804936] (-) TimerEvent: {}
+[2.827833] (autol_driver) StdoutLine: {'line': b'-- Looking for gethostbyname - found\n'}
+[2.827961] (autol_driver) StdoutLine: {'line': b'-- Looking for connect\n'}
+[2.872502] (autol_driver) StdoutLine: {'line': b'-- Looking for connect - found\n'}
+[2.872642] (autol_driver) StdoutLine: {'line': b'-- Looking for remove\n'}
+[2.905033] (-) TimerEvent: {}
+[2.925106] (autol_driver) StdoutLine: {'line': b'-- Looking for remove - found\n'}
+[2.925238] (autol_driver) StdoutLine: {'line': b'-- Looking for shmat\n'}
+[2.970706] (autol_driver) StdoutLine: {'line': b'-- Looking for shmat - found\n'}
+[2.970976] (autol_driver) StdoutLine: {'line': b'-- Looking for IceConnectionNumber in ICE\n'}
+[3.005257] (-) TimerEvent: {}
+[3.019291] (autol_driver) StdoutLine: {'line': b'-- Looking for IceConnectionNumber in ICE - found\n'}
+[3.095820] (autol_driver) StdoutLine: {'line': b'-- Found EXPAT: /usr/lib/x86_64-linux-gnu/libexpat.so (found version "2.4.7") \n'}
+[3.099180] (autol_driver) StdoutLine: {'line': b'-- Found double-conversion: /usr/lib/x86_64-linux-gnu/libdouble-conversion.so  \n'}
+[3.102420] (autol_driver) StdoutLine: {'line': b'-- Found LZ4: /usr/lib/x86_64-linux-gnu/liblz4.so (found version "1.9.3") \n'}
+[3.105282] (autol_driver) StdoutLine: {'line': b'-- Found LZMA: /usr/lib/x86_64-linux-gnu/liblzma.so (found version "5.2.5") \n'}
+[3.105437] (-) TimerEvent: {}
+[3.118646] (autol_driver) StdoutLine: {'line': b'-- Found JPEG: /usr/lib/x86_64-linux-gnu/libjpeg.so (found version "80") \n'}
+[3.127648] (autol_driver) StdoutLine: {'line': b'-- Found TIFF: /usr/lib/x86_64-linux-gnu/libtiff.so (found version "4.3.0") \n'}
+[3.133093] (autol_driver) StdoutLine: {'line': b'-- Found Freetype: /usr/lib/x86_64-linux-gnu/libfreetype.so (found version "2.11.1") \n'}
+[3.143396] (autol_driver) StdoutLine: {'line': b'-- Found utf8cpp: /usr/include/utf8cpp  \n'}
+[3.205572] (-) TimerEvent: {}
+[3.241885] (autol_driver) StdoutLine: {'line': b"-- Checking for module 'libusb-1.0'\n"}
+[3.251152] (autol_driver) StdoutLine: {'line': b'--   Found libusb-1.0, version 1.0.25\n'}
+[3.268981] (autol_driver) StdoutLine: {'line': b'-- Found libusb: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  \n'}
+[3.270987] (autol_driver) StdoutLine: {'line': b'-- Found OpenNI: /usr/lib/libOpenNI.so;libusb::libusb (found version "1.5.4.0") \n'}
+[3.271052] (autol_driver) StdoutLine: {'line': b'-- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)\n'}
+[3.305656] (-) TimerEvent: {}
+[3.306468] (autol_driver) StdoutLine: {'line': b'-- Found OpenNI2: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb (found version "2.2.0.33") \n'}
+[3.306565] (autol_driver) StdoutLine: {'line': b'-- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)\n'}
+[3.306957] (autol_driver) StderrLine: {'line': b'** WARNING ** io features related to pcap will be disabled\n'}
+[3.390482] (autol_driver) StdoutLine: {'line': b'-- Could NOT find MPI (missing: MPI_C_FOUND C) \n'}
+[3.390651] (autol_driver) StdoutLine: {'line': b"    Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  \n"}
+[3.390690] (autol_driver) StdoutLine: {'line': b'\n'}
+[3.405751] (-) TimerEvent: {}
+[3.505965] (-) TimerEvent: {}
+[3.557555] (autol_driver) StdoutLine: {'line': b'-- Eigen found (include: /usr/include/eigen3, version: 3.4.0)\n'}
+[3.565172] (autol_driver) StdoutLine: {'line': b'-- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)\n'}
+[3.572228] (autol_driver) StdoutLine: {'line': b'-- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)\n'}
+[3.606063] (-) TimerEvent: {}
+[3.653062] (autol_driver) StdoutLine: {'line': b'-- Could NOT find MPI (missing: MPI_C_FOUND C) \n'}
+[3.653254] (autol_driver) StdoutLine: {'line': b"    Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  \n"}
+[3.653407] (autol_driver) StdoutLine: {'line': b'\n'}
+[3.706154] (-) TimerEvent: {}
+[3.802726] (autol_driver) StdoutLine: {'line': b'-- Found Qhull version 8.0.2\n'}
+[3.806248] (-) TimerEvent: {}
+[3.881706] (autol_driver) StdoutLine: {'line': b'-- Could NOT find MPI (missing: MPI_C_FOUND C) \n'}
+[3.881822] (autol_driver) StdoutLine: {'line': b"    Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  \n"}
+[3.881856] (autol_driver) StdoutLine: {'line': b'\n'}
+[3.906353] (-) TimerEvent: {}
+[4.006595] (-) TimerEvent: {}
+[4.032625] (autol_driver) StdoutLine: {'line': b'-- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)\n'}
+[4.106699] (-) TimerEvent: {}
+[4.111345] (autol_driver) StdoutLine: {'line': b'-- Could NOT find MPI (missing: MPI_C_FOUND C) \n'}
+[4.111425] (autol_driver) StdoutLine: {'line': b"    Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  \n"}
+[4.111456] (autol_driver) StdoutLine: {'line': b'\n'}
+[4.206800] (-) TimerEvent: {}
+[4.258301] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_COMMON\n'}
+[4.259671] (autol_driver) StdoutLine: {'line': b'-- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  \n'}
+[4.260282] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_KDTREE\n'}
+[4.261625] (autol_driver) StdoutLine: {'line': b'-- Found PCL_KDTREE: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so  \n'}
+[4.262210] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_OCTREE\n'}
+[4.263425] (autol_driver) StdoutLine: {'line': b'-- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  \n'}
+[4.263978] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_SEARCH\n'}
+[4.265191] (autol_driver) StdoutLine: {'line': b'-- Found PCL_SEARCH: /usr/lib/x86_64-linux-gnu/libpcl_search.so  \n'}
+[4.265785] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_SAMPLE_CONSENSUS\n'}
+[4.267004] (autol_driver) StdoutLine: {'line': b'-- Found PCL_SAMPLE_CONSENSUS: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so  \n'}
+[4.267575] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_FILTERS\n'}
+[4.268770] (autol_driver) StdoutLine: {'line': b'-- Found PCL_FILTERS: /usr/lib/x86_64-linux-gnu/libpcl_filters.so  \n'}
+[4.269468] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_2D\n'}
+[4.270004] (autol_driver) StdoutLine: {'line': b'-- Found PCL_2D: /usr/include/pcl-1.12  \n'}
+[4.270458] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_GEOMETRY\n'}
+[4.271017] (autol_driver) StdoutLine: {'line': b'-- Found PCL_GEOMETRY: /usr/include/pcl-1.12  \n'}
+[4.271383] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_IO\n'}
+[4.272587] (autol_driver) StdoutLine: {'line': b'-- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  \n'}
+[4.273350] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_FEATURES\n'}
+[4.274649] (autol_driver) StdoutLine: {'line': b'-- Found PCL_FEATURES: /usr/lib/x86_64-linux-gnu/libpcl_features.so  \n'}
+[4.275357] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_ML\n'}
+[4.276587] (autol_driver) StdoutLine: {'line': b'-- Found PCL_ML: /usr/lib/x86_64-linux-gnu/libpcl_ml.so  \n'}
+[4.277139] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_SEGMENTATION\n'}
+[4.278636] (autol_driver) StdoutLine: {'line': b'-- Found PCL_SEGMENTATION: /usr/lib/x86_64-linux-gnu/libpcl_segmentation.so  \n'}
+[4.279464] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_VISUALIZATION\n'}
+[4.280686] (autol_driver) StdoutLine: {'line': b'-- Found PCL_VISUALIZATION: /usr/lib/x86_64-linux-gnu/libpcl_visualization.so  \n'}
+[4.281492] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_SURFACE\n'}
+[4.282755] (autol_driver) StdoutLine: {'line': b'-- Found PCL_SURFACE: /usr/lib/x86_64-linux-gnu/libpcl_surface.so  \n'}
+[4.283420] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_REGISTRATION\n'}
+[4.284654] (autol_driver) StdoutLine: {'line': b'-- Found PCL_REGISTRATION: /usr/lib/x86_64-linux-gnu/libpcl_registration.so  \n'}
+[4.285429] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_KEYPOINTS\n'}
+[4.286654] (autol_driver) StdoutLine: {'line': b'-- Found PCL_KEYPOINTS: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so  \n'}
+[4.287387] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_TRACKING\n'}
+[4.288769] (autol_driver) StdoutLine: {'line': b'-- Found PCL_TRACKING: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so  \n'}
+[4.289395] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_RECOGNITION\n'}
+[4.290696] (autol_driver) StdoutLine: {'line': b'-- Found PCL_RECOGNITION: /usr/lib/x86_64-linux-gnu/libpcl_recognition.so  \n'}
+[4.291598] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_STEREO\n'}
+[4.292831] (autol_driver) StdoutLine: {'line': b'-- Found PCL_STEREO: /usr/lib/x86_64-linux-gnu/libpcl_stereo.so  \n'}
+[4.293412] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_APPS\n'}
+[4.294668] (autol_driver) StdoutLine: {'line': b'-- Found PCL_APPS: /usr/lib/x86_64-linux-gnu/libpcl_apps.so  \n'}
+[4.296102] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_IN_HAND_SCANNER\n'}
+[4.296737] (autol_driver) StdoutLine: {'line': b'-- Found PCL_IN_HAND_SCANNER: /usr/include/pcl-1.12  \n'}
+[4.297059] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_MODELER\n'}
+[4.297669] (autol_driver) StdoutLine: {'line': b'-- Found PCL_MODELER: /usr/include/pcl-1.12  \n'}
+[4.297990] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_POINT_CLOUD_EDITOR\n'}
+[4.298621] (autol_driver) StdoutLine: {'line': b'-- Found PCL_POINT_CLOUD_EDITOR: /usr/include/pcl-1.12  \n'}
+[4.298924] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_OUTOFCORE\n'}
+[4.300383] (autol_driver) StdoutLine: {'line': b'-- Found PCL_OUTOFCORE: /usr/lib/x86_64-linux-gnu/libpcl_outofcore.so  \n'}
+[4.301220] (autol_driver) StdoutLine: {'line': b'-- looking for PCL_PEOPLE\n'}
+[4.302677] (autol_driver) StdoutLine: {'line': b'-- Found PCL_PEOPLE: /usr/lib/x86_64-linux-gnu/libpcl_people.so  \n'}
+[4.305661] (autol_driver) StdoutLine: {'line': b'-- Found PCL: pcl_common;pcl_kdtree;pcl_octree;pcl_search;pcl_sample_consensus;pcl_filters;pcl_io;pcl_features;pcl_ml;pcl_segmentation;pcl_visualization;pcl_surface;pcl_registration;pcl_keypoints;pcl_tracking;pcl_recognition;pcl_stereo;pcl_apps;pcl_outofcore;pcl_people;Boost::system;Boost::filesystem;Boost::date_time;Boost::iostreams;Boost::serialization;/usr/lib/libOpenNI.so;libusb::libusb;/usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb;VTK::ChartsCore;VTK::CommonColor;VTK::CommonComputationalGeometry;VTK::CommonCore;VTK::CommonDataModel;VTK::CommonExecutionModel;VTK::CommonMath;VTK::CommonMisc;VTK::CommonTransforms;VTK::FiltersCore;VTK::FiltersExtraction;VTK::FiltersGeneral;VTK::FiltersGeometry;VTK::FiltersModeling;VTK::FiltersSources;VTK::ImagingCore;VTK::ImagingSources;VTK::InteractionImage;VTK::InteractionStyle;VTK::InteractionWidgets;VTK::IOCore;VTK::IOGeometry;VTK::IOImage;VTK::IOLegacy;VTK::IOPLY;VTK::RenderingAnnotation;VTK::RenderingCore;VTK::RenderingContext2D;VTK::RenderingLOD;VTK::RenderingFreeType;VTK::ViewsCore;VTK::ViewsContext2D;VTK::RenderingOpenGL2;VTK::GUISupportQt;FLANN::FLANN;QHULL::QHULL  \n'}
+[4.306873] (-) TimerEvent: {}
+[4.315592] (autol_driver) StderrLine: {'line': b'CMake Error at CMakeLists.txt:42 (find_package):\n'}
+[4.315645] (autol_driver) StderrLine: {'line': b'  By not providing "Findautol_msgs.cmake" in CMAKE_MODULE_PATH this project\n'}
+[4.315677] (autol_driver) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[4.315701] (autol_driver) StderrLine: {'line': b'  "autol_msgs", but CMake did not find one.\n'}
+[4.315724] (autol_driver) StderrLine: {'line': b'\n'}
+[4.315748] (autol_driver) StderrLine: {'line': b'  Could not find a package configuration file provided by "autol_msgs" with\n'}
+[4.315771] (autol_driver) StderrLine: {'line': b'  any of the following names:\n'}
+[4.315793] (autol_driver) StderrLine: {'line': b'\n'}
+[4.315815] (autol_driver) StderrLine: {'line': b'    autol_msgsConfig.cmake\n'}
+[4.315837] (autol_driver) StderrLine: {'line': b'    autol_msgs-config.cmake\n'}
+[4.315859] (autol_driver) StderrLine: {'line': b'\n'}
+[4.315881] (autol_driver) StderrLine: {'line': b'  Add the installation prefix of "autol_msgs" to CMAKE_PREFIX_PATH or set\n'}
+[4.315903] (autol_driver) StderrLine: {'line': b'  "autol_msgs_DIR" to a directory containing one of the above files.  If\n'}
+[4.315924] (autol_driver) StderrLine: {'line': b'  "autol_msgs" provides a separate development package or SDK, be sure it has\n'}
+[4.315946] (autol_driver) StderrLine: {'line': b'  been installed.\n'}
+[4.315968] (autol_driver) StderrLine: {'line': b'\n'}
+[4.315990] (autol_driver) StderrLine: {'line': b'\n'}
+[4.317135] (autol_driver) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[4.317179] (autol_driver) StdoutLine: {'line': b'See also "/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/build/autol_driver/CMakeFiles/CMakeOutput.log".\n'}
+[4.328928] (autol_driver) CommandEnded: {'returncode': 1}
+[4.352962] (autol_driver) JobEnded: {'identifier': 'autol_driver', 'rc': 1}
+[4.363304] (-) EventReactorShutdown: {}

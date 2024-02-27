@@ -1,0 +1,160 @@
+[0.025s] Invoking command in '/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/build/autol_driver': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver -DCMAKE_INSTALL_PREFIX=/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/install/autol_driver
+[0.071s] -- The CXX compiler identification is GNU 11.4.0
+[0.080s] -- Check for working CXX compiler: /usr/bin/c++
+[0.122s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.123s] -- Detecting CXX compiler ABI info
+[0.166s] -- Detecting CXX compiler ABI info - done
+[0.195s] -- Detecting CXX compile features
+[0.195s] -- Detecting CXX compile features - done
+[0.197s] -- Found ament_cmake_auto: 1.3.7 (/opt/ros/humble/share/ament_cmake_auto/cmake)
+[0.273s] -- Found Python3: /usr/bin/python3.8 (found version "3.8.18") found components: Interpreter 
+[0.452s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.461s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.478s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.514s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.563s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.731s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.735s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.867s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so   
+[0.897s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.960s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.975s] -- Looking for C++ include pthread.h
+[1.022s] -- Looking for C++ include pthread.h - found
+[1.022s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.070s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.072s] -- Found Threads: TRUE  
+[2.322s] -- Checking for module 'eigen3'
+[2.331s] --   Found eigen3, version 3.4.0
+[2.347s] -- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+[2.347s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[2.375s] -- Found Boost: /usr/local/lib/cmake/Boost-1.84.0/BoostConfig.cmake (found suitable version "1.84.0", minimum required is "1.65.0") found components: system filesystem date_time iostreams serialization 
+[2.392s] -- Checking for module 'flann'
+[2.403s] --   Found flann, version 1.9.1
+[2.427s] -- Found FLANN: /usr/lib/x86_64-linux-gnu/libflann_cpp.so  
+[2.427s] -- FLANN found (include: /usr/include, lib: /usr/lib/x86_64-linux-gnu/libflann_cpp.so)
+[2.524s] -- Found GLEW: /usr/lib/x86_64-linux-gnu/libGLEW.so  
+[2.533s] -- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so  found components: OpenGL GLX 
+[2.543s] -- Could NOT find MPI (missing: MPI_C_FOUND C) 
+[2.543s]     Reason given by package: MPI component 'C' was requested, but language C is not enabled.  
+[2.543s] 
+[2.546s] -- Found JsonCpp: /usr/lib/x86_64-linux-gnu/libjsoncpp.so (found suitable version "1.9.5", minimum required is "0.7.0") 
+[2.559s] -- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11") 
+[2.582s] -- Found PNG: /usr/lib/x86_64-linux-gnu/libpng.so (found version "1.6.37") 
+[2.605s] -- Found Eigen3: /usr/include/eigen3 (found version "3.4.0") 
+[2.684s] -- Found X11: /usr/include   
+[2.684s] -- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so
+[2.764s] -- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found
+[2.765s] -- Looking for gethostbyname
+[2.828s] -- Looking for gethostbyname - found
+[2.828s] -- Looking for connect
+[2.872s] -- Looking for connect - found
+[2.873s] -- Looking for remove
+[2.925s] -- Looking for remove - found
+[2.925s] -- Looking for shmat
+[2.971s] -- Looking for shmat - found
+[2.971s] -- Looking for IceConnectionNumber in ICE
+[3.019s] -- Looking for IceConnectionNumber in ICE - found
+[3.096s] -- Found EXPAT: /usr/lib/x86_64-linux-gnu/libexpat.so (found version "2.4.7") 
+[3.099s] -- Found double-conversion: /usr/lib/x86_64-linux-gnu/libdouble-conversion.so  
+[3.102s] -- Found LZ4: /usr/lib/x86_64-linux-gnu/liblz4.so (found version "1.9.3") 
+[3.105s] -- Found LZMA: /usr/lib/x86_64-linux-gnu/liblzma.so (found version "5.2.5") 
+[3.119s] -- Found JPEG: /usr/lib/x86_64-linux-gnu/libjpeg.so (found version "80") 
+[3.128s] -- Found TIFF: /usr/lib/x86_64-linux-gnu/libtiff.so (found version "4.3.0") 
+[3.133s] -- Found Freetype: /usr/lib/x86_64-linux-gnu/libfreetype.so (found version "2.11.1") 
+[3.143s] -- Found utf8cpp: /usr/include/utf8cpp  
+[3.242s] -- Checking for module 'libusb-1.0'
+[3.251s] --   Found libusb-1.0, version 1.0.25
+[3.269s] -- Found libusb: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  
+[3.271s] -- Found OpenNI: /usr/lib/libOpenNI.so;libusb::libusb (found version "1.5.4.0") 
+[3.271s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[3.306s] -- Found OpenNI2: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb (found version "2.2.0.33") 
+[3.306s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[3.307s] ** WARNING ** io features related to pcap will be disabled
+[3.390s] -- Could NOT find MPI (missing: MPI_C_FOUND C) 
+[3.391s]     Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  
+[3.391s] 
+[3.558s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[3.565s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[3.572s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[3.653s] -- Could NOT find MPI (missing: MPI_C_FOUND C) 
+[3.653s]     Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  
+[3.653s] 
+[3.803s] -- Found Qhull version 8.0.2
+[3.882s] -- Could NOT find MPI (missing: MPI_C_FOUND C) 
+[3.882s]     Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  
+[3.882s] 
+[4.033s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[4.111s] -- Could NOT find MPI (missing: MPI_C_FOUND C) 
+[4.111s]     Reason given by package: MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  MPI component 'C' was requested, but language C is not enabled.  
+[4.111s] 
+[4.258s] -- looking for PCL_COMMON
+[4.260s] -- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+[4.260s] -- looking for PCL_KDTREE
+[4.262s] -- Found PCL_KDTREE: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so  
+[4.262s] -- looking for PCL_OCTREE
+[4.263s] -- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  
+[4.264s] -- looking for PCL_SEARCH
+[4.265s] -- Found PCL_SEARCH: /usr/lib/x86_64-linux-gnu/libpcl_search.so  
+[4.266s] -- looking for PCL_SAMPLE_CONSENSUS
+[4.267s] -- Found PCL_SAMPLE_CONSENSUS: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so  
+[4.267s] -- looking for PCL_FILTERS
+[4.269s] -- Found PCL_FILTERS: /usr/lib/x86_64-linux-gnu/libpcl_filters.so  
+[4.269s] -- looking for PCL_2D
+[4.270s] -- Found PCL_2D: /usr/include/pcl-1.12  
+[4.270s] -- looking for PCL_GEOMETRY
+[4.271s] -- Found PCL_GEOMETRY: /usr/include/pcl-1.12  
+[4.271s] -- looking for PCL_IO
+[4.272s] -- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  
+[4.273s] -- looking for PCL_FEATURES
+[4.275s] -- Found PCL_FEATURES: /usr/lib/x86_64-linux-gnu/libpcl_features.so  
+[4.275s] -- looking for PCL_ML
+[4.276s] -- Found PCL_ML: /usr/lib/x86_64-linux-gnu/libpcl_ml.so  
+[4.277s] -- looking for PCL_SEGMENTATION
+[4.279s] -- Found PCL_SEGMENTATION: /usr/lib/x86_64-linux-gnu/libpcl_segmentation.so  
+[4.279s] -- looking for PCL_VISUALIZATION
+[4.281s] -- Found PCL_VISUALIZATION: /usr/lib/x86_64-linux-gnu/libpcl_visualization.so  
+[4.281s] -- looking for PCL_SURFACE
+[4.283s] -- Found PCL_SURFACE: /usr/lib/x86_64-linux-gnu/libpcl_surface.so  
+[4.283s] -- looking for PCL_REGISTRATION
+[4.285s] -- Found PCL_REGISTRATION: /usr/lib/x86_64-linux-gnu/libpcl_registration.so  
+[4.285s] -- looking for PCL_KEYPOINTS
+[4.287s] -- Found PCL_KEYPOINTS: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so  
+[4.287s] -- looking for PCL_TRACKING
+[4.289s] -- Found PCL_TRACKING: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so  
+[4.289s] -- looking for PCL_RECOGNITION
+[4.291s] -- Found PCL_RECOGNITION: /usr/lib/x86_64-linux-gnu/libpcl_recognition.so  
+[4.291s] -- looking for PCL_STEREO
+[4.293s] -- Found PCL_STEREO: /usr/lib/x86_64-linux-gnu/libpcl_stereo.so  
+[4.293s] -- looking for PCL_APPS
+[4.295s] -- Found PCL_APPS: /usr/lib/x86_64-linux-gnu/libpcl_apps.so  
+[4.296s] -- looking for PCL_IN_HAND_SCANNER
+[4.297s] -- Found PCL_IN_HAND_SCANNER: /usr/include/pcl-1.12  
+[4.297s] -- looking for PCL_MODELER
+[4.298s] -- Found PCL_MODELER: /usr/include/pcl-1.12  
+[4.298s] -- looking for PCL_POINT_CLOUD_EDITOR
+[4.299s] -- Found PCL_POINT_CLOUD_EDITOR: /usr/include/pcl-1.12  
+[4.299s] -- looking for PCL_OUTOFCORE
+[4.300s] -- Found PCL_OUTOFCORE: /usr/lib/x86_64-linux-gnu/libpcl_outofcore.so  
+[4.301s] -- looking for PCL_PEOPLE
+[4.303s] -- Found PCL_PEOPLE: /usr/lib/x86_64-linux-gnu/libpcl_people.so  
+[4.306s] -- Found PCL: pcl_common;pcl_kdtree;pcl_octree;pcl_search;pcl_sample_consensus;pcl_filters;pcl_io;pcl_features;pcl_ml;pcl_segmentation;pcl_visualization;pcl_surface;pcl_registration;pcl_keypoints;pcl_tracking;pcl_recognition;pcl_stereo;pcl_apps;pcl_outofcore;pcl_people;Boost::system;Boost::filesystem;Boost::date_time;Boost::iostreams;Boost::serialization;/usr/lib/libOpenNI.so;libusb::libusb;/usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb;VTK::ChartsCore;VTK::CommonColor;VTK::CommonComputationalGeometry;VTK::CommonCore;VTK::CommonDataModel;VTK::CommonExecutionModel;VTK::CommonMath;VTK::CommonMisc;VTK::CommonTransforms;VTK::FiltersCore;VTK::FiltersExtraction;VTK::FiltersGeneral;VTK::FiltersGeometry;VTK::FiltersModeling;VTK::FiltersSources;VTK::ImagingCore;VTK::ImagingSources;VTK::InteractionImage;VTK::InteractionStyle;VTK::InteractionWidgets;VTK::IOCore;VTK::IOGeometry;VTK::IOImage;VTK::IOLegacy;VTK::IOPLY;VTK::RenderingAnnotation;VTK::RenderingCore;VTK::RenderingContext2D;VTK::RenderingLOD;VTK::RenderingFreeType;VTK::ViewsCore;VTK::ViewsContext2D;VTK::RenderingOpenGL2;VTK::GUISupportQt;FLANN::FLANN;QHULL::QHULL  
+[4.315s] CMake Error at CMakeLists.txt:42 (find_package):
+[4.316s]   By not providing "Findautol_msgs.cmake" in CMAKE_MODULE_PATH this project
+[4.316s]   has asked CMake to find a package configuration file provided by
+[4.316s]   "autol_msgs", but CMake did not find one.
+[4.316s] 
+[4.316s]   Could not find a package configuration file provided by "autol_msgs" with
+[4.316s]   any of the following names:
+[4.316s] 
+[4.316s]     autol_msgsConfig.cmake
+[4.316s]     autol_msgs-config.cmake
+[4.316s] 
+[4.316s]   Add the installation prefix of "autol_msgs" to CMAKE_PREFIX_PATH or set
+[4.316s]   "autol_msgs_DIR" to a directory containing one of the above files.  If
+[4.316s]   "autol_msgs" provides a separate development package or SDK, be sure it has
+[4.316s]   been installed.
+[4.316s] 
+[4.316s] 
+[4.317s] -- Configuring incomplete, errors occurred!
+[4.317s] See also "/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/build/autol_driver/CMakeFiles/CMakeOutput.log".
+[4.329s] Invoked command in '/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/build/autol_driver' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver -DCMAKE_INSTALL_PREFIX=/home/autol/Lidar_Ros_Driver/autol_ros_driver_Release/autol_driver/install/autol_driver

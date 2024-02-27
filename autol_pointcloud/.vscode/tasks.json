@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cmake",
+			"label": "CMake: build",
+			"command": "build",
+			"targets": [
+				"all"
+			],
+			"group": "build",
+			"problemMatcher": [],
+			"detail": "CMake template build task"
+		},
+		{
+			"type": "shell",
+			"label": "colcon: build",
+			"command": "colcon build --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
+			"group": {
+                "kind": "build",
+                "isDefault": true
+            },
+			"problemMatcher": [],
+			"detail": "CMake template build task"
+		},
+		{
+            "label": "colcon: clean",
+            "type": "shell",
+            "command": "rm -rf build install log"
+        }
+	]
+}
