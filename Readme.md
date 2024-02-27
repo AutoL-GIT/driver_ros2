@@ -142,7 +142,8 @@ lidar_port_6 = 5006
 
 | Parameter   | Detailed description                                         | Default |
 | ----------- | ------------------------------------------------------------ | ------- |
-| calibration | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />0 -- unused slam offset <br />1 -- used slam offset | False   |
+| calibration | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />0 -- unused slam offset <br />1 -- used slam offset<br /> (Calibration values can be set in the 'autol_pointcloud/params
+/slam_offset.yaml' file) | False   |
 
 ```python
 #Example of setting the parameters of pointcloud launch file 
