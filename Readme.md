@@ -88,9 +88,6 @@ $ source install/setup.bash
 | autol_frame_data | Packet data communication per frame unit. |
 | autol_pointcloud | Data communication in Pointcloud2 format. |
 
-#### 3.3 Node Graph
-
-![image-20240226143649146](/home/autol/.config/Typora/typora-user-images/image-20240226143649146.png)
 
 - If utilizing point cloud data is needed, use the data received through the autol_pointcloud topic.
 
