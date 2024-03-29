@@ -10,7 +10,7 @@
 
 - Source Code: Download or Git Clone from GitHub
 
-  ![driver_interface](/home/autol/Lidar_Ros_Driver/driver_ros2_autol_sdk_porting_ver/autol_driver/img/driver_interface.png)
+![driver_interface](https://github.com/AutoL-GIT/driver_ros2/assets/57899329/d585228a-c424-4bc6-8668-a391b6d84c9d)
 
 ## 1. Preparation 
 
@@ -43,7 +43,7 @@
 #### 1.4 Class Structure
 
 - **class diagram**
-  ![class_diagram](/home/autol/Lidar_Ros_Driver/driver_ros2_autol_sdk_porting_ver/autol_driver/img/class_diagram.png)
+![class_diagram](https://github.com/AutoL-GIT/driver_ros2/assets/57899329/db5f8df0-97cb-44e4-9152-d932a7e9a1b3)
   - **AutolDriver**:  AutolDriver defines the interface of a source and create ros node & topic 
   - **InputManager**: Interface Classes of InputSocket and InputPcap
     - **InputSocket**: Socket Communication Interface Classes
