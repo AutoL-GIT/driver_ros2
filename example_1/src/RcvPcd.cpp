@@ -21,9 +21,9 @@ namespace example
     void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
     {
         sensor_msgs::PointCloud2ConstIterator<float> iter_x(*pcd, "x"),
-            iter_y(*pcd, "y"),
-            iter_z(*pcd, "z"),
-            iter_intensity(*pcd, "intensity");
+                                                     iter_y(*pcd, "y"),
+                                                     iter_z(*pcd, "z"),
+                                                     iter_intensity(*pcd, "intensity");
         int cnt = 0;
         while (iter_x != iter_x.end())
         {

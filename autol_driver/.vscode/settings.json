@@ -81,7 +81,13 @@
         "source_location": "cpp",
         "core": "cpp",
         "any": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "buffer": "cpp",
+        "executor": "cpp",
+        "io_context": "cpp",
+        "netfwd": "cpp",
+        "socket": "cpp",
+        "climits": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

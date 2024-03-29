@@ -1,3 +1,6 @@
-build/
-install/
-log/
+autol_driver/build/
+autol_driver/install/
+autol_driver/log/
+example_1/build/
+example_1/install/
+example_1/log/

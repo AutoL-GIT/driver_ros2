@@ -10,24 +10,32 @@ import launch
 manufacture_id = 'autol'
 model_id = 'G32'
 input_type = 1
-pcap_path = ''
-packet_per_frame = 180
 frame_rate = 25
-lidar_count = 2
+
+lidar_count = 1
 lidar_port_1 = 5001
 lidar_port_2 = 5002
 lidar_port_3 = 5003
 lidar_port_4 = 5004
 lidar_port_5 = 5005
 lidar_port_6 = 5006
+
+pcap_path = ''
+packet_per_frame = 180
+read_once = 0
+read_fast = 0
+repeat_delay = 0.0
+calibration = False
+
+rviz_config=get_package_share_directory('autol_driver')+'/rviz/pointcloud2_config.rviz'
  
 autol_node_parameters = [
+  #Sensor Parameter
     {"manufacture_id": manufacture_id},
     {"model_id": model_id},
     {"input_type" : input_type},
-    {"pcap_path": pcap_path},
-    {"packet_per_frame": packet_per_frame},
     {"frame_rate": frame_rate},
+  #Socket Parameter
     {"lidar_count": lidar_count},
     {"lidar_port_1": lidar_port_1},
     {"lidar_port_2": lidar_port_2},
@@ -35,6 +43,14 @@ autol_node_parameters = [
     {"lidar_port_4": lidar_port_4},
     {"lidar_port_5": lidar_port_5},
     {"lidar_port_6": lidar_port_6},
+  #Pcap Parameter
+    {"pcap_path": pcap_path},
+    {"packet_per_frame": packet_per_frame},
+    {"read_once": read_once},
+    {"read_fast": read_fast},
+    {"repeat_delay": repeat_delay},
+  #calibration
+    {"calibration" : calibration},
 ]
 
 def generate_launch_description():
@@ -45,8 +61,17 @@ def generate_launch_description():
     output='screen',
     parameters=autol_node_parameters,
   )
+  
+
+  autol_rviz = Node(
+    package='rviz2',
+    executable='rviz2',
+    name='rviz',
+    output='screen',
+    arguments=['-d',rviz_config]
+  )
   return LaunchDescription([
-    autol_driver,
+    autol_driver, autol_rviz,
   ])
     
 
