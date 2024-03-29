@@ -10,7 +10,7 @@
 
 - Source Code: Download or Git Clone from GitHub
 
-  
+  ![driver_interface](/home/autol/Lidar_Ros_Driver/driver_ros2_autol_sdk_porting_ver/autol_driver/img/driver_interface.png)
 
 ## 1. Preparation 
 
@@ -21,10 +21,10 @@
 
 #### 1.2 Installation ROS2
 
-- For ROS2 Foxy installation, please refer to: [ROS Foxy installation instructions](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
-
-- For ROS2 Humble installation, please refer to: [ROS Humble installation instructions](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html) 
 - ROS2 uses the Colcon build tool, please refer to: [Colcon installation instructions](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
+
+- For ROS2 Foxy installation, please refer to: [ROS Foxy installation instructions](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html)
+- For ROS2 Humble installation, please refer to: [ROS Humble installation instructions](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html) 
 - Desktop-Full installation is recommend.
 
 #### 1.3 Install related library
@@ -39,7 +39,18 @@
   $ sudo apt-get install ros-${distro}-pcl-conversions ros-${distro}-pcl-ros
   ```
 
-  
+
+#### 1.4 Class Structure
+
+- **class diagram**
+  ![class_diagram](/home/autol/Lidar_Ros_Driver/driver_ros2_autol_sdk_porting_ver/autol_driver/img/class_diagram.png)
+  - **AutolDriver**:  AutolDriver defines the interface of a source and create ros node & topic 
+  - **InputManager**: Interface Classes of InputSocket and InputPcap
+    - **InputSocket**: Socket Communication Interface Classes
+    - **InputPcap**: Pcap file interface class
+  - **LidarController**: LiDAR parsing thread management class
+  - **ParserManager**: LiDAR parsing management class
+  - **G32Parser**: G32 parsing class
 
 ## 2. Build & Run 
 
@@ -64,22 +75,14 @@ $ source install/setup.bash
    $ ros2 launch autol_driver driver.py
    ```
 
-2. **Launch the autol_pointcloud**
-
-   ```bash
-   $ ros2 launch autol_pointcloud pointcloud.py
-   ```
-
-
-
 ## 3. ROS2 Interface Structure
 
 #### 3.1 Node
 
-| Node name       | Description                                                  |
-| --------------- | :----------------------------------------------------------- |
-| driver_node     | Receive the UDP Packets from the LiDAR Sensor, Package them into frame(one scene) unit, and deliver(publish). |
-| pointcloud_node | Receive the Subscribes to frame unit packet data(from the driver_node), transforms data into a 3D Cartesian coordinate system (pointcloud2). |
+| Node name  | Description                                                  |
+| ---------- | :----------------------------------------------------------- |
+| pub_frame_ | Receive the UDP Packets from the LiDAR Sensor, Package them into frame(one scene) unit, and deliver(publish). |
+| pub_pcd_   | Receive the Subscribes to frame unit packet data, transforms data into a 3D Cartesian coordinate system (pointcloud2). |
 
 #### 3.2 Topic
 
@@ -95,10 +98,9 @@ $ source install/setup.bash
 
 #### 4.1 Launch file
 
-| launch file name  | Description                                                  |
-| ----------------- | ------------------------------------------------------------ |
-| driver.launch     | Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data) |
-| pointcloud.launch | Publish pointcloud2 msg and auto load rviz                   |
+| launch file name | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| driver.launch    | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz |
 
 #### 4.2 Parameter
 
@@ -109,23 +111,26 @@ $ source install/setup.bash
 | manufature_id    | Set the Lidar manufacture id                                 | autol         |
 | model_id         | Supported LiDAR models are listed in the README file.        | G32           |
 | input_type       | Set the source of LiDAR packets<br />0 -- Unused . Never set this parameter to 0.<br />1 -- LiDAR packets come frome on-line LiDAR<br />2 -- LiDAR packets come from a PCAP | 1             |
-| pcap_path        | The full path of the PCAP file. Valid if input_type = 2.     | " "           |
-| packet_per_frame | Set the num of packet per frame, recommended values 180.     | 180           |
 | frame_rate       | Set the frequency of point cloud publish Floating-point data type. | 25 (unit: Hz) |
 | lidar_count      | Set the num of lidar                                         | 1             |
 | lidar_port_1     | Set the First Lidar communication packet port.               | 5001          |
 | lidar_port_2     | Set the Second Lidar communication packet port.              | 5002          |
 | ⁞                | ⁞                                                            | ⁞             |
 | lidar_port_6     | Set the Sixth Lidar communication packet port.               | 5006          |
+| pcap_path        | The full path of the PCAP file. Valid if input_type = 2.     | " "           |
+| packet_per_frame | Set the num of packet per frame, recommended values 180.     | 180           |
+| read_once        | Variables that determine whether to read the pcap file repeatedly or once | 0             |
+| read_fast        | Adjust the pcap read speed more faster                       | 0             |
+| repeat_delay     | Adjust the pcap read speed more slower                       | 0             |
+| calibration      | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />0 -- unused slam offset <br />1 -- used slam offset<br />  ※ Calibration values can be set in the 'autol_pointcloud/params/slam_offset.yaml' file | False         |
 
 ```python
 #Example of setting the parameters of driver launch file 
 manufacture_id = 'autol'
 model_id = 'G32'
 input_type = 1
-pcap_path = ''
-packet_per_frame = 180
 frame_rate = 25
+
 lidar_count = 1
 lidar_port_1 = 5001
 lidar_port_2 = 5002
@@ -133,20 +138,65 @@ lidar_port_3 = 5003
 lidar_port_4 = 5004
 lidar_port_5 = 5005
 lidar_port_6 = 5006
+
+pcap_path = ''
+packet_per_frame = 180
+read_once = 0
+read_fast = 0
+repeat_delay = 0.0
+calibration = True
 ```
 
-##### 2. autol_pointcloud parameter
+## 5. Subscribe autol_pointcloud node example
 
-| Parameter   | Detailed description                                         | Default |
-| ----------- | ------------------------------------------------------------ | ------- |
-| calibration | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />0 -- unused slam offset <br />1 -- used slam offset<br />  ※ Calibration values can be set in the 'autol_pointcloud/params/slam_offset.yaml' file | False   |
+#### 5.1 To learn how to receive point cloud data topics, refer to the example_1 file
 
-```python
-#Example of setting the parameters of pointcloud launch file 
-calibration = False
+```c++
+//example_1 RcvPcd.cpp
+RcvPcd::RcvPcd(const rclcpp::NodeOptions &options)
+    : rclcpp::Node("example_node", options)
+{
+    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));
+    //Subscribe the pointcloud data
+    subPointData_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("autol_pointcloud",
+                                                                             qos_profile,
+                                                                             std::bind(&RcvPcd::pointcloud_cb, this,
+                                                                                       std::placeholders::_1));
+    rclcpp::spin(this->get_node_base_interface());
+}
+
+void RcvPcd::DoSomthing()
+{
+    // Put your code here
+}
+
+void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
+{
+    //accumlate the pointcloud data to sensor_msgs
+    sensor_msgs::PointCloud2ConstIterator<float> iter_x(*pcd, "x"),
+                                                 iter_y(*pcd, "y"),
+                                                 iter_z(*pcd, "z"),
+                                                 iter_intensity(*pcd, "intensity");
+    int cnt = 0;
+    while (iter_x != iter_x.end())
+    {
+        ++cnt;
+        if (cnt == 10000)
+        {
+            RCLCPP_INFO(this->get_logger(), "%f %f %f %f", *iter_x, *iter_y, *iter_z, *iter_intensity);
+        }
+        ++iter_x;
+        ++iter_y;
+        ++iter_z;
+        ++iter_intensity;
+    }
+}
 ```
 
-## 5. Supported LiDAR List
+## 6. Supported LiDAR List
 
 - Manufacture id: AutoL / Model Id: G32 
+
 - (more types are comming soon...)
+
+  
