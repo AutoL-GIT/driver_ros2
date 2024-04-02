@@ -207,11 +207,11 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
   ```
 #### 6.2 Launch file
 
-- **Before starting, be sure to specify the save_path in the launch file."**
+- **Before starting, be sure to specify the save_path in the launch file.**
 
-| launch file name | Description                             |
-| ---------------- | --------------------------------------- |
-| autol_pcd_saver  | Specifies the path to the storage file. |
+  | launch file name | Description                             |
+  | ---------------- | --------------------------------------- |
+  | autol_pcd_saver  | Specifies the path to the storage file. |
 
 #### 6.3 Parameter
 
