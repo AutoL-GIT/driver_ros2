@@ -193,7 +193,47 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
 }
 ```
 
-## 6. Supported LiDAR List
+## 6. Save PCD File 
+
+#### 6.1 To learn how to save PCD , refer to the autol_pcd_saver file
+
+- After subscribing point2cloud msg from autol_driver, save it as a pcd file.
+- **"Make sure to specify the file path in the launch file before starting."**
+
+#### 6.2 Launch file
+
+| launch file name | Description                             |
+| ---------------- | --------------------------------------- |
+| autol_pcd_saver  | Specifies the path to the storage file. |
+
+#### 6.3 Parameter
+
+| Parameter | Detailed description              | Default |
+| --------- | --------------------------------- | ------- |
+| save_path | Set the path to the storage file. | ' '     |
+
+#### 6.4 Code
+
+```C++
+//Subscribe PointCloud2 Msg and Save the PCD File
+void PcdSaver::SavePcdCallBack(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
+{
+    ++cnt_;
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    //PointCloud2 Msg -> PCD Format
+    pcl::fromROSMsg(*pcd, cloud);
+    std::stringstream ss;
+    ss << save_path_ << cnt_ << ".pcd";
+
+    std::string filename = ss.str();
+
+    RCLCPP_INFO(node_.get_logger(), "pcd data : %s", filename.c_str());
+    //Save PCD Format
+    pcl::io::savePCDFileASCII(filename, cloud);
+}
+```
+
+## 7. Supported LiDAR List
 
 - Manufacture id: AutoL / Model Id: G32 
 

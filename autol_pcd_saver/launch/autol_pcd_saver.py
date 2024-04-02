@@ -7,7 +7,7 @@ from launch_ros.actions import Node
 import launch
 
 ################### user configure parameters for ros2 start ###################
-save_path = '/home/autol/Data/LoggingData/pcd/'
+save_path = ''
  
 autol_node_parameters = [
     {"save_path": save_path},
