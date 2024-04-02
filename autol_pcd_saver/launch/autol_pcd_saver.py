@@ -7,6 +7,8 @@ from launch_ros.actions import Node
 import launch
 
 ################### user configure parameters for ros2 start ###################
+#Example of setting the parameters of driver launch file 
+#Please type your storage path here.
 save_path = ''
  
 autol_node_parameters = [

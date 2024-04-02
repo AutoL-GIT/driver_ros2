@@ -220,6 +220,12 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
 | --------- | --------------------------------- | ------- |
 | save_path | Set the path to the storage file. | ' '     |
 
+```python
+#Example of setting the parameters of driver launch file 
+#Please type your storage path here.
+save_path = ''
+```
+
 #### 6.4 Code
 
 ```C++
