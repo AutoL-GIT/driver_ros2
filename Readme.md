@@ -43,7 +43,7 @@
 #### 1.4 Class Structure
 
 - **class diagram**
-![class_diagram](https://github.com/AutoL-GIT/driver_ros2/assets/57899329/db5f8df0-97cb-44e4-9152-d932a7e9a1b3)
+  ![class_diagram](https://github.com/AutoL-GIT/driver_ros2/assets/57899329/e4c657cf-19e8-4188-a9b9-0920a69deab9)
   - **AutolDriver**:  AutolDriver defines the interface of a source and create ros node & topic 
   - **InputManager**: Interface Classes of InputSocket and InputPcap
     - **InputSocket**: Socket Communication Interface Classes
