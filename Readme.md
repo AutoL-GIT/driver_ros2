@@ -199,16 +199,15 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
 
 - After subscribing point2cloud msg from autol_driver, save it as a pcd file.
 
-- **Make sure to specify the file path in the launch file before starting.**
-
 - Launch the autol_pcd_saver
   ```bash
   $ colcon build
   $ source install setup.bash
   $ ros2 launch autol_pcd_saver autol_pcd_saver.py
   ```
-
 #### 6.2 Launch file
+
+- **Before starting, be sure to specify the save_path in the launch file."**
 
 | launch file name | Description                             |
 | ---------------- | --------------------------------------- |
