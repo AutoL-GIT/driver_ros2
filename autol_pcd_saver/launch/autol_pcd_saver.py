@@ -16,7 +16,7 @@ autol_node_parameters = [
 def generate_launch_description():
   autol_pcd_saver = Node(
     package='autol_pcd_saver',
-    executable='pcd_saver_node',
+    executable='autol_pcd_saver_node',
     name='autol_pcd_publisher',
     output='screen',
     parameters=autol_node_parameters,
