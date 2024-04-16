@@ -35,8 +35,7 @@
   $ sudo apt-get install build-essential
   $ sudo apt-get install libpcap-dev
   $ sudo apt-get install libyaml-cpp-dev
-  $ sudo apt-get install libpcl-all
-  $ sudo apt-get install ros-${distro}-pcl-conversions ros-${distro}-pcl-ros
+  $ sudo apt-get install libpcl-dev
   ```
 
 
