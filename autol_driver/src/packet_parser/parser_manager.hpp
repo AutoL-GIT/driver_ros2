@@ -221,6 +221,7 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         if (pkt_data != NULL && input_type_ == InputType::PCAP)
         {
             memcpy(buffer, pkt_data + pcapHeaderSz, header->caplen);
+            usleep(100); //for thread sync
         }
 
         lidar_udp_packet.DeSerializeUdpPacket(buffer, PACKET_DATA_SIZE);

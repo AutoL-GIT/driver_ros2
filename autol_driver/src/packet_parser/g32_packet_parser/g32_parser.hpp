@@ -152,6 +152,7 @@ void G32Parser::ChangePacketsToFov()
                             pcd_callback_(pcd_data, lidar_idx_);
                             // re-init
                             pcd_data.clear();
+                            fov_data_set_t.clear();
                             frame_data.clear();
                             frame_data.emplace_back(packet);
                         }
