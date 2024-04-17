@@ -7,3 +7,6 @@ example_1/log/
 autol_pcd_saver/build/
 autol_pcd_saver/install/
 autol_pcd_saver/log/
+build/
+install/
+log/

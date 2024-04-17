@@ -6,7 +6,6 @@
 #include "udp_socket.hpp"
 #include "input/input_manager.hpp"
 #include "lidar_controller/lidar_controller.hpp"
-
 template <class LidarUdpPacket>
 class Parser : public LidarController
 {
@@ -86,6 +85,13 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     std::filesystem::path currentPath = std::filesystem::current_path();
     std::string filePath = "params/slam_offset.yaml";
     std::filesystem::path fullPath = currentPath / filePath;
+    
+    if(std::filesystem::exists(fullPath) == false)
+    {
+        std::string tempPath = "autol_driver";
+        fullPath = currentPath / tempPath / filePath;
+    }
+   
     // Read slam_offset.yaml file
     calibration_.ReadSlamOffset(fullPath.string());
 }

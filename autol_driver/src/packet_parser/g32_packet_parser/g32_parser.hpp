@@ -214,6 +214,7 @@ void G32Parser::ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t
             float pos_x = 0;
             float pos_y = 0;
             float pos_z = 0;
+            intensity = fov_data_set_t[i].data_points_[j].reflectivity_;
             ConvertPolorToOrthCood((float)fov_data_set_t[i].data_points_[j].distance_,
                                    fov_data_set_t[i].data_points_[j].vertical_angle_,
                                    fov_data_set_t[i].azimuth_, pos_x, pos_y, pos_z, 0);
