@@ -121,7 +121,7 @@ $ source install/setup.bash
 | read_once        | Variables that determine whether to read the pcap file repeatedly or once | 0             |
 | read_fast        | Adjust the pcap read speed more faster                       | 0             |
 | repeat_delay     | Adjust the pcap read speed more slower                       | 0             |
-| calibration      | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />0 -- unused slam offset <br />1 -- used slam offset<br />  ※ Calibration values can be set in the 'autol_pointcloud/params/slam_offset.yaml' file | False         |
+| calibration      | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />0 -- unused slam offset <br />1 -- used slam offset<br />  ※ Calibration values can be set in the 'autol_driver/params/slam_offset.yaml' file | False         |
 
 ```python
 #Example of setting the parameters of driver launch file 
