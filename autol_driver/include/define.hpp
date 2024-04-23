@@ -28,7 +28,7 @@
 #include "packet_structure/g32_packet_structure.hpp"
 
 #define UNUSED(x) (void)(x)
-
+#define MAX_NUM_LIDAR 6
 enum class ManufatureId
 {
     autol
