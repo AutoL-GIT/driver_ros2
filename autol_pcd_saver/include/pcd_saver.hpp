@@ -27,7 +27,7 @@ PcdSaver::PcdSaver(const rclcpp::NodeOptions &options)
     this->get_parameter("save_path", save_path_);
 
     auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));
-    subPointData_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("autol_pointcloud",
+    subPointData_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("autol_pointcloud_0",
                                                                              qos_profile,
                                                                              std::bind(&PcdSaver::SavePcdCallBack, this,
                                                                                        std::placeholders::_1));
