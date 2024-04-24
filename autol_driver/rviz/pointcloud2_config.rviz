@@ -77,7 +77,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.1
       Style: Flat Squares
-      Topic: /autol_pointcloud_0
+      Topic: /autol_pointcloud_1
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -105,7 +105,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.1
       Style: Flat Squares
-      Topic: /autol_pointcloud_1 #second topic
+      Topic: /autol_pointcloud_2 #second topic
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

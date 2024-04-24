@@ -6,7 +6,7 @@ namespace example
         : rclcpp::Node("example_node", options)
     {
         auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));
-        subPointData_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("autol_pointcloud_0",
+        subPointData_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("autol_pointcloud_1",
                                                                                  qos_profile,
                                                                                  std::bind(&RcvPcd::pointcloud_cb, this,
                                                                                            std::placeholders::_1));

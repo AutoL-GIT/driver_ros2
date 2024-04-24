@@ -38,6 +38,7 @@ private:
   std::map<int32_t, G32PointData> merge_pcd_data_;
   //point cloud msg
   sensor_msgs::msg::PointCloud2 ros_msg_arr_[MAX_NUM_LIDAR];
+  mutex publish_mutex;
 
 };
 
@@ -169,8 +170,8 @@ void AutolDriver::Init()
   {
     std::ostringstream oss_1;
     std::ostringstream oss_2;
-    oss_1 << "autol_frame_data_" << iIdxI;
-    oss_2 << "autol_pointcloud_" << iIdxI;
+    oss_1 << "autol_frame_data_" << iIdxI + 1;
+    oss_2 << "autol_pointcloud_" << iIdxI + 1;
     std::string frame_data = oss_1.str();
     std::string poin_cloud = oss_2.str();;
     pub_frame_[iIdxI] = node_.create_publisher<autol_driver::msg::AutolFrame>(frame_data, 10);
@@ -222,51 +223,57 @@ inline void AutolDriver::SendPcdData(const G32PointData &point_cloud, int32_t li
   }
 
   // step2. send lidar pcd data
-  for(int32_t iIdxI  = 0; iIdxI < lidar_config_.lidar_count; iIdxI++)
-  {
-    // RCLCPP_INFO(node_.get_logger(), "publish lidar idx: %d!!!!!!!!!!!!!", iIdxI);
-    ros_msg_arr_[iIdxI].data.clear();
-    ros_msg_arr_[iIdxI].fields.clear();
-    ros_msg_arr_[iIdxI].fields.reserve(fields);
-    ros_msg_arr_[iIdxI].width = point_num_arr[iIdxI];
-    ros_msg_arr_[iIdxI].height = 1;
-    offset = addPointField(ros_msg_arr_[iIdxI], "x", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
-    offset = addPointField(ros_msg_arr_[iIdxI], "y", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
-    offset = addPointField(ros_msg_arr_[iIdxI], "z", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
-    offset = addPointField(ros_msg_arr_[iIdxI], "intensity", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
-    offset = addPointField(ros_msg_arr_[iIdxI], "ring", 1, sensor_msgs::msg::PointField::UINT16, offset);
-    offset = addPointField(ros_msg_arr_[iIdxI], "timestamp", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
-    ros_msg_arr_[iIdxI].point_step = offset;
-    ros_msg_arr_[iIdxI].row_step = ros_msg_arr_[iIdxI].width * ros_msg_arr_[iIdxI].point_step;
-    ros_msg_arr_[iIdxI].is_dense = false;
-    ros_msg_arr_[iIdxI].data.resize(point_num_arr[iIdxI] * ros_msg_arr_[iIdxI].point_step);
-    sensor_msgs::PointCloud2Iterator<float> iter_x_(ros_msg_arr_[iIdxI], "x");
-    sensor_msgs::PointCloud2Iterator<float> iter_y_(ros_msg_arr_[iIdxI], "y");
-    sensor_msgs::PointCloud2Iterator<float> iter_z_(ros_msg_arr_[iIdxI], "z");
-    sensor_msgs::PointCloud2Iterator<float> iter_intensity_(ros_msg_arr_[iIdxI], "intensity");
-    sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring_(ros_msg_arr_[iIdxI], "ring");
-    sensor_msgs::PointCloud2Iterator<double> iter_timestamp_(ros_msg_arr_[iIdxI], "timestamp");
-
-    for (int32_t iIdxJ = 0; iIdxJ < (int32_t)merge_pcd_data_[iIdxI].size(); iIdxJ++)
+    for(int32_t iIdxI  = 0; iIdxI < lidar_config_.lidar_count; iIdxI++)
     {
-      DataPoint point = merge_pcd_data_[iIdxI][iIdxJ];
-      *iter_x_ = point.x;
-      *iter_y_ = point.y;
-      *iter_z_ = point.z;
-      *iter_intensity_ = point.intensity;
-      *iter_ring_ = point.ring;
-      *iter_timestamp_ = point.timestamp;
-      ++iter_x_;
-      ++iter_y_;
-      ++iter_z_;
-      ++iter_intensity_;
-      ++iter_ring_;
-      ++iter_timestamp_;
+      // RCLCPP_INFO(node_.get_logger(), "publish lidar idx: %d!!!!!!!!!!!!!", iIdxI);
+      // ros_msg_arr_[iIdxI].data.clear();
+      ros_msg_arr_[iIdxI].fields.clear();
+      ros_msg_arr_[iIdxI].fields.reserve(fields);
+      ros_msg_arr_[iIdxI].width = point_num_arr[iIdxI];
+      ros_msg_arr_[iIdxI].height = 1;
+      offset = addPointField(ros_msg_arr_[iIdxI], "x", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
+      offset = addPointField(ros_msg_arr_[iIdxI], "y", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
+      offset = addPointField(ros_msg_arr_[iIdxI], "z", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
+      offset = addPointField(ros_msg_arr_[iIdxI], "intensity", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
+      offset = addPointField(ros_msg_arr_[iIdxI], "ring", 1, sensor_msgs::msg::PointField::UINT16, offset);
+      offset = addPointField(ros_msg_arr_[iIdxI], "timestamp", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
+      ros_msg_arr_[iIdxI].point_step = offset;
+      ros_msg_arr_[iIdxI].row_step = ros_msg_arr_[iIdxI].width * ros_msg_arr_[iIdxI].point_step;
+      ros_msg_arr_[iIdxI].is_dense = false;
+      ros_msg_arr_[iIdxI].data.resize(point_num_arr[iIdxI] * ros_msg_arr_[iIdxI].point_step);
+      sensor_msgs::PointCloud2Iterator<float> iter_x_(ros_msg_arr_[iIdxI], "x");
+      sensor_msgs::PointCloud2Iterator<float> iter_y_(ros_msg_arr_[iIdxI], "y");
+      sensor_msgs::PointCloud2Iterator<float> iter_z_(ros_msg_arr_[iIdxI], "z");
+      sensor_msgs::PointCloud2Iterator<float> iter_intensity_(ros_msg_arr_[iIdxI], "intensity");
+      sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring_(ros_msg_arr_[iIdxI], "ring");
+      sensor_msgs::PointCloud2Iterator<double> iter_timestamp_(ros_msg_arr_[iIdxI], "timestamp");
+
+      for (int32_t iIdxJ = 0; iIdxJ < (int32_t)merge_pcd_data_[iIdxI].size(); iIdxJ++)
+      {
+        DataPoint point = merge_pcd_data_[iIdxI][iIdxJ];
+        *iter_x_ = point.x;
+        *iter_y_ = point.y;
+        *iter_z_ = point.z;
+        *iter_intensity_ = point.intensity;
+        *iter_ring_ = point.ring;
+        *iter_timestamp_ = point.timestamp;
+        ++iter_x_;
+        ++iter_y_;
+        ++iter_z_;
+        ++iter_intensity_;
+        ++iter_ring_;
+        ++iter_timestamp_;
+      }
     }
-    merge_pcd_data_[iIdxI].clear();
-    ros_msg_arr_[iIdxI].header.frame_id = "autol_lidar";
-    RCLCPP_INFO(node_.get_logger(), "publish lidar idx: %d, pointcloud data: %d", iIdxI, ros_msg_arr_[iIdxI].width);
-    pub_pcd_[iIdxI]->publish(ros_msg_arr_[iIdxI]);
-  }
+    
+    publish_mutex.lock();
+    for(int32_t iIdxI = 0; iIdxI < lidar_config_.lidar_count; iIdxI++)
+    {
+      merge_pcd_data_[iIdxI].clear();
+      ros_msg_arr_[iIdxI].header.frame_id = "autol_lidar";
+      RCLCPP_INFO(node_.get_logger(), "publish lidar idx: %d, pointcloud data: %d", iIdxI, ros_msg_arr_[iIdxI].width);
+      pub_pcd_[iIdxI]->publish(ros_msg_arr_[iIdxI]);
+    }
+    publish_mutex.unlock();
 }
 #endif
