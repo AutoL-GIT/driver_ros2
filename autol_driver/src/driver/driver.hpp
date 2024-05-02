@@ -57,10 +57,10 @@ void AutolDriver::Init()
   // default Parameter
   node_.declare_parameter("manufacture_id", rclcpp::ParameterValue("autol"));
   node_.declare_parameter("model_id", rclcpp::ParameterValue("G32"));
-  node_.declare_parameter("input_type", rclcpp::ParameterValue(2));
+  node_.declare_parameter("input_type", rclcpp::ParameterValue(1));
   node_.declare_parameter("framerate", rclcpp::ParameterValue(25));
 
-  node_.declare_parameter("lidar_count", rclcpp::ParameterValue(2));
+  node_.declare_parameter("lidar_count", rclcpp::ParameterValue(1));
   node_.declare_parameter("lidar_port_1", rclcpp::ParameterValue(5001));
   node_.declare_parameter("lidar_port_2", rclcpp::ParameterValue(5002));
   node_.declare_parameter("lidar_port_3", rclcpp::ParameterValue(5003));
@@ -68,7 +68,7 @@ void AutolDriver::Init()
   node_.declare_parameter("lidar_port_5", rclcpp::ParameterValue(5005));
   node_.declare_parameter("lidar_port_6", rclcpp::ParameterValue(5006));
 
-  node_.declare_parameter("pcap_path", rclcpp::ParameterValue("/home/autol/Data/LoggingData/pcap/2024-04-23-16-43-06_AutoL_Point_Data.pcap"));
+  node_.declare_parameter("pcap_path", rclcpp::ParameterValue(""));
   node_.declare_parameter("packet_per_frame", rclcpp::ParameterValue(180));
   node_.declare_parameter("read_once", rclcpp::ParameterValue(0));
   node_.declare_parameter("read_fast", rclcpp::ParameterValue(0));
