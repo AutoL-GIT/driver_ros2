@@ -12,10 +12,14 @@ class Parser : public LidarController
 public:
     Parser() {}
     virtual ~Parser() {}
+    //Packet ReceiveThread and ChangeToFov Thread Management Function
     virtual void StartParserThread(LIDAR_CONFIG &lidar_config, int32_t idx);
     virtual void StopParserThread();
+    //Packet Receive Thread
     void ReceiveThreadDowork();
+    //Socket Connect Function
     bool ConnectSocket(int port_num);
+    //Packet File Open Function 
     bool LoadPcap(int32_t port_num);
 
     UDPSocket udp_socket_;
@@ -96,7 +100,7 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     calibration_.ReadSlamOffset(fullPath.string());
 }
 
-// stop parser thread
+// Stop parser thread
 template <class LidarUdpPacket>
 void Parser<LidarUdpPacket>::StopParserThread()
 {
@@ -106,6 +110,7 @@ void Parser<LidarUdpPacket>::StopParserThread()
     packets_to_fov_thread.join();
 }
 
+//Socket Connect Function
 template <class LidarUdpPacket>
 bool Parser<LidarUdpPacket>::ConnectSocket(int port_num)
 {

@@ -9,6 +9,7 @@ protected:
     rclcpp::Node *node_;
     LIDAR_CONFIG lidar_config_;
     int32_t lidar_idx_;
+    // Callback Function 
     std::function<void(const G32FrameData_t&, int32_t)> packet_callback_;
     std::function<void(const G32PointData&, int32_t)> pcd_callback_;
     //lidar controller class
@@ -37,11 +38,13 @@ public:
 
 };
 
+//Packet Callback
 void InputManager::RegRecvCallback(const std::function<void(const G32FrameData_t&, int32_t)>& callback)
 {
     packet_callback_ = callback;
 }
 
+//Point Cloud Callback
 void InputManager::RegRecvPcdCallback(const std::function<void(const G32PointData&, int32_t)>& callback)
 {
     pcd_callback_ = callback;

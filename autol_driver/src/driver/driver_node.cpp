@@ -17,10 +17,12 @@ int main(int argc, char **argv) // Node Main Function
 
   auto options = rclcpp::NodeOptions();
   std::shared_ptr<AutolDriver> autol_driver = std::make_shared<AutolDriver>(options);
-  autol_driver->Init();
-  autol_driver->Start();
+  autol_driver->Init(); //Init Configuration 
+  autol_driver->Start(); // Driver Start
+
   std::unique_lock<std::mutex> lck(g_mtx);
   g_cv.wait(lck);
+  
   rclcpp::shutdown();
   RCLCPP_INFO(autol_driver->get_logger(), "Close the AutoL ROS Driver");
   return 0;

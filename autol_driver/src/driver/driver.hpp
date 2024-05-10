@@ -25,7 +25,9 @@ public:
   void SendPcdData(const G32PointData &fov_data_set, int32_t lidar_idx);
 
 protected:
+  //Packet Frame Publisher
   rclcpp::Publisher<autol_driver::msg::AutolFrame>::SharedPtr pub_frame_[MAX_NUM_LIDAR];
+  //Point Cloud Publisher
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pub_pcd_[MAX_NUM_LIDAR];
 
 private:
@@ -104,6 +106,7 @@ void AutolDriver::Init()
   node_.get_parameter("repeat_delay", lidar_config_.repeat_delay);
   node_.get_parameter("calibration", lidar_config_.calibration);
 
+  //Set Lidar Configuration
   if (manufacture_id == "autol")
   {
     lidar_config_.manufacture_id = ManufatureId::autol;
@@ -187,8 +190,8 @@ void AutolDriver::Start()
   {
     if (iter != nullptr)
     {
-      iter->SetRosNode(&node_);
-      iter->StartRecvData();
+      iter->SetRosNode(&node_); //Get node address
+      iter->StartRecvData(); 
     }
   }
 }

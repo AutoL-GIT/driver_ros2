@@ -8,6 +8,7 @@
 class InputPcap : public InputManager
 {
 public:
+
     InputPcap(LIDAR_CONFIG &lidar_config, int32_t lidar_idx) : InputManager(lidar_config, lidar_idx)
     {
         packet_callback_ = NULL;
@@ -22,7 +23,7 @@ public:
 
 void InputPcap::StartRecvData()
 {
-    //assign parse function 
+    //Assign parse function 
     switch (lidar_config_.model_id)
     {
     case ModelId::G32:
@@ -35,10 +36,13 @@ void InputPcap::StartRecvData()
     }
     //Start parser thread 
     lidar_ctrl_ptr_->StartParserThread(lidar_config_, lidar_idx_);
+    //Get node address
     lidar_ctrl_ptr_->node_ = node_;
+    //Get Lidar Configure address
     lidar_ctrl_ptr_->lidar_idx_ = lidar_idx_;
 }
 
+// Close Parser Thread
 void InputPcap::StopRecvData()
 {
     lidar_ctrl_ptr_->StopParserThread();
