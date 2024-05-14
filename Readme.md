@@ -10,6 +10,9 @@
 
 - Source Code: Download or Git Clone from GitHub
 
+- Default Sensor Network IP: 192.168.1.101
+
+- PC Network IP: 192.168.1.xx
 ![driver_interface](https://github.com/AutoL-GIT/driver_ros2/assets/57899329/d585228a-c424-4bc6-8668-a391b6d84c9d)
 
 ## 1. Preparation 
