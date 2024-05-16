@@ -102,7 +102,9 @@ $ source install/setup.bash
 
 | launch file name | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
-| driver.launch    | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz |
+| driver.py        | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz)<br />3. Path<br />   - autol_driver/driver.py #if you modify this file, you must compile the code<br />   - autol_driver/install/driver.py #if you modify this file, you should not compile the code. but the content does not  apply source code <br /> |
+
+
 
 #### 4.2 Parameter
 
@@ -149,9 +151,33 @@ repeat_delay = 0.0
 calibration = True
 ```
 
-## 5. Subscribe autol_pointcloud node example
+## 5. Slam Offset (LiDAR Calibration)
 
-#### 5.1 To learn how to receive point cloud data topics, refer to the example_1 file
+#### 5.1 Slam Offset 
+
+- This file is for LiDAR calibration.
+- It can adjust  up to six LiDAR point cloud position for X, Y, Z, Roll, Pitch, Yaw.
+- Path: autol_driver/params/slam_offset.yaml
+- If you modify the file, you must compile the code
+
+#### 5.2 Code 
+
+```yaml
+offset:
+- {lidar_id: 0, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+- {lidar_id: 1, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+- {lidar_id: 2, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+- {lidar_id: 3, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+- {lidar_id: 4, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+- {lidar_id: 5, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+
+```
+
+
+
+## 6. Subscribe autol_pointcloud node example
+
+#### 6.1 To learn how to receive point cloud data topics, refer to the example_1 file
 
 ```c++
 //example_1 RcvPcd.cpp
@@ -195,9 +221,9 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
 }
 ```
 
-## 6. Save PCD File 
+## 7. Save PCD File 
 
-#### 6.1 To learn how to save PCD , refer to the autol_pcd_saver file
+#### 7.1 To learn how to save PCD , refer to the autol_pcd_saver file
 
 - After subscribing point2cloud msg from autol_driver, save it as a pcd file.
 
@@ -207,7 +233,7 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
   $ source install setup.bash
   $ ros2 launch autol_pcd_saver autol_pcd_saver.py
   ```
-#### 6.2 Launch file
+#### 7.2 Launch file
 
 - **Before starting, be sure to specify the save_path in the launch file.**
 
@@ -215,7 +241,7 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
   | ---------------- | --------------------------------------- |
   | autol_pcd_saver  | Specifies the path to the storage file. |
 
-#### 6.3 Parameter
+#### 7.3 Parameter
 
 | Parameter | Detailed description              | Default |
 | --------- | --------------------------------- | ------- |
@@ -227,7 +253,7 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
 save_path = ''
 ```
 
-#### 6.4 Code
+#### 7.4 Code
 
 ```C++
 //Subscribe PointCloud2 Msg and Save the PCD File
@@ -248,7 +274,7 @@ void PcdSaver::SavePcdCallBack(const sensor_msgs::msg::PointCloud2::ConstPtr &pc
 }
 ```
 
-## 7. Supported LiDAR List
+## 8. Supported LiDAR List
 
 - Manufacture id: AutoL / Model Id: G32 
 
