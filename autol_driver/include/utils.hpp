@@ -6,7 +6,7 @@
 
 void ConvertPolorToOrthCood(float distance, float elevation, float azimuth_offset, float &pos_x, float &pos_y, float &pos_z, float z_axes_offset)
 {
-    distance *= 0.01;
+    distance /= 256.0;
     pos_x = distance * cos(elevation * PI / 180) * cos((azimuth_offset)*PI / 180);
     pos_y = distance * cos(elevation * PI / 180) * sin((azimuth_offset)*PI / 180);
     pos_z = (distance != 0.0) ? distance * sin(elevation * PI / 180) + z_axes_offset : 0.0;
