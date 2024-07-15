@@ -28,12 +28,12 @@ public:
     bool initialized;
     int node_type_;
 
-    int num_lidars;
+    int num_lidars_;
     std::vector<SlamOffset> lidar_slamoffset_corrections;
 
 public:
     Calibration();
-    void ReadSlamOffset(std::string file);
+    void ReadSlamOffset(std::string file, int num_lidars);
 
 private:
 };
@@ -86,12 +86,12 @@ void operator>>(const YAML::Node &node, Calibration &calibration)
 {
     if (calibration.node_type_ == 1)
     {
-        int num_lidars;
-        node["num_lidars"] >> num_lidars;
+        //int num_lidars;
+        // node["num_lidars"] >> num_lidars;
         const YAML::Node &offset = node["offset"];
-        calibration.lidar_slamoffset_corrections.resize(num_lidars);
+        calibration.lidar_slamoffset_corrections.resize(calibration.num_lidars_);
 
-        for (int i = 0; i < num_lidars; i++)
+        for (int i = 0; i < calibration.num_lidars_; i++)
         {
             std::pair<int, SlamOffset> slamoffset_correction;
             offset[i] >> slamoffset_correction;
@@ -107,8 +107,10 @@ void operator>>(const YAML::Node &node, Calibration &calibration)
     }
 }
 
-void Calibration::ReadSlamOffset(std::string file)
+void Calibration::ReadSlamOffset(std::string file, int num_lidars)
 {
+
+    num_lidars_ = num_lidars;
     std::ifstream fin(file.c_str());
     if (!fin.is_open())
     {
@@ -124,6 +126,7 @@ void Calibration::ReadSlamOffset(std::string file)
         doc = YAML::LoadFile(file);
 #else
         doc = YAML::Load(fin);
+
 #endif
         node_type_ = 1;
         doc >> *this;
@@ -139,7 +142,6 @@ void Calibration::ReadSlamOffset(std::string file)
 void ApplyRPY(float &pos_x, float &pos_y, float &pos_z, int lidar_id, std::vector<SlamOffset> &rpy)
 {
     float rotated_x = 0, rotated_y = 0, rotated_z = 0;
-
     float angle = rpy[lidar_id].roll * PI / 180.;
     rotated_y = pos_y * cos(angle) - pos_z * sin(angle);
     rotated_z = pos_y * sin(angle) + pos_z * cos(angle);

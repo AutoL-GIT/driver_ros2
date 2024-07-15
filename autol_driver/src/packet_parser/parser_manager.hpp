@@ -97,7 +97,7 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     }
    
     // Read slam_offset.yaml file
-    calibration_.ReadSlamOffset(fullPath.string());
+    calibration_.ReadSlamOffset(fullPath.string(), lidar_config_.lidar_count);
 }
 
 // Stop parser thread
