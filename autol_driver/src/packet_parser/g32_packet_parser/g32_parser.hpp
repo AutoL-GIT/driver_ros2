@@ -66,9 +66,16 @@ void G32Parser::ChangePacketsToFov()
         //Get packet data from packet_queue
         if (!packet_queue.empty())
         {
-            // if(packet_queue.size() > 0)
+            // if(packet_queue.size() > 100)
             // {
-            //     cout << "lidar : " << lidar_idx_ << " " << packet_queue.size() << "\n";
+            //     cout << "lidar : pop " << lidar_idx_ << " " << packet_queue.size() << "\n";\
+
+            //     std::ofstream outFile("debug.ini", std::ios::app);
+            //     if(outFile.is_open())
+            //     {
+            //         outFile << "lidar pop : " << lidar_idx_ << " " << packet_queue.size() << "\n";
+            //     }
+            //     outFile.close();
             // }
             packet = packet_queue.front();
             packet_queue.pop();

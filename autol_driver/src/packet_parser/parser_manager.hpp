@@ -238,7 +238,24 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         lidar_udp_packet.DeSerializeUdpPacket(buffer, PACKET_DATA_SIZE);
         //3. accumulate packet data to packet_queue 
         queue_mutex.lock();
-        packet_queue.push(lidar_udp_packet);
+
+            if (packet_queue.size() < 200)
+            {
+                packet_queue.push(lidar_udp_packet);                
+            }
+            //  else
+            //  {                
+            // //     std::ofstream outFile("debug.ini", std::ios::app);
+            // //     if(outFile.is_open())
+            // //     {
+            // //         outFile << "lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
+            // //     }
+            // //     outFile.close();
+            //     std::time_t now = std::time(nullptr);
+            //     char* dt = std::ctime(&now);
+            //     cout << dt << " / lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
+            //  }
+        
         queue_mutex.unlock();
     }
     if (input_type_ == InputType::UDP)
