@@ -1,6 +1,6 @@
 offset:
-- {lidar_id: 0, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
-- {lidar_id: 1, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
+- {lidar_id: 0, roll: 0, pitch: 0, yaw: 23.0, x_offset: 0, y_offset: 0.67, z_offset: 0.68}
+- {lidar_id: 1, roll: 0, pitch: 0, yaw: -27.6, x_offset: 0, y_offset: -0.01, z_offset: 0.68}
 - {lidar_id: 2, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
 - {lidar_id: 3, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}
 - {lidar_id: 4, roll: 0, pitch: 0, yaw: 0, x_offset: 0, y_offset: 0, z_offset: 0}

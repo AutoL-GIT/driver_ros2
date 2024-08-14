@@ -12,7 +12,7 @@ model_id = 'G32'
 input_type = 1
 frame_rate = 25
 
-lidar_count = 1
+lidar_count = 2
 lidar_port_1 = 5001
 lidar_port_2 = 5002
 lidar_port_3 = 5003
@@ -20,12 +20,12 @@ lidar_port_4 = 5004
 lidar_port_5 = 5005
 lidar_port_6 = 5006
 
-pcap_path = ''
+pcap_path = '/home/autol/data/2024-08-09-15-12-23_AutoL_Point_Data.pcap'
 packet_per_frame = 180
 read_once = 0
 read_fast = 0
 repeat_delay = 0.0
-calibration = False
+calibration = True
 
 rviz_config=get_package_share_directory('autol_driver')+'/rviz/pointcloud2_config.rviz'
  
