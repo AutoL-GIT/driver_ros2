@@ -230,7 +230,7 @@ void RcvPcd::pointcloud_cb(const sensor_msgs::msg::PointCloud2::ConstPtr &pcd)
 - Launch the autol_pcd_saver
   ```bash
   $ colcon build
-  $ source install setup.bash
+  $ source install/setup.bash
   $ ros2 launch autol_pcd_saver autol_pcd_saver.py
   ```
 #### 7.2 Launch file

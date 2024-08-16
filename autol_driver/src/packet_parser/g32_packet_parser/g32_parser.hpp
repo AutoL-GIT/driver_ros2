@@ -9,7 +9,6 @@ public:
     virtual ~G32Parser() {}
     virtual void ChangePacketsToFov();
     virtual void ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data);
-    virtual void SetVerticalAngle(ModelId model_id, float angle);
 
 private:
     float vertical_angle_arr_[32];
@@ -187,28 +186,6 @@ void G32Parser::ChangePacketsToFov()
                 packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
             }
         }
-    }
-}
-
-void G32Parser::SetVerticalAngle(ModelId device_id, float angle)
-{
-    switch (device_id)
-    {
-    case ModelId::G32:
-    {
-        int num_of_channel = 16;
-        top_bottom_offset = angle / (2 * num_of_channel);
-        float angle_start = -angle / 2 + top_bottom_offset / 2;
-
-        for (int32_t i = 0; i < num_of_channel; i++)
-        {
-            vertical_angle_arr_[i] = angle_start + (angle / num_of_channel) * i;
-            vertical_angle_arr_[i + 16] = angle_start + (angle / num_of_channel) * i + top_bottom_offset;
-        }
-    }
-    break;
-    default:
-        break;
     }
 }
 

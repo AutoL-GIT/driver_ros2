@@ -42,7 +42,7 @@ void PcdSaver::SavePcdCallBack(const sensor_msgs::msg::PointCloud2::ConstPtr &pc
     //PointCloud2 Msg -> PCD Format
     pcl::fromROSMsg(*pcd, cloud);
     std::stringstream ss;
-    ss << save_path_ << cnt_ << ".pcd";
+    ss << save_path_ << "/" << cnt_ << ".pcd";
 
     std::string filename = ss.str();
 

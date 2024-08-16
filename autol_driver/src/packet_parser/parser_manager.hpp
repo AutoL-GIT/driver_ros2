@@ -17,6 +17,8 @@ public:
     virtual void StopParserThread();
     //Packet Receive Thread
     void ReceiveThreadDowork();
+    //Make FramePackage and Convert pcd
+    void ChangePacketsToFovSyn(AutoLG32UdpPacket lidar_udp_packet, int32_t idx);
     //Socket Connect Function
     bool ConnectSocket(int port_num);
     //Packet File Open Function 
@@ -41,8 +43,16 @@ public:
     unsigned int frame_rate = 25;
     unsigned int vertical_angle = 10;
 
-    unsigned long long prev_packet_id = 0; // autol
-    unsigned long long update_count;
+
+    vector<AutoLG32FovDataBlock> fov_data_set_t;
+    int stage_count = 0;
+    long long cur_packet_id = 0;
+    long long prev_packet_id = 0;
+    long long num_of_lost_packet = 0;
+    bool is_first_fov_data = true;
+    unsigned long long update_count = 0;
+    vector<AutoLG32UdpPacket> frame_data;
+    vector<int> lidar_id_vector_;
 
     // Pcap Variables
     pcap_t *pcap_;
@@ -55,17 +65,44 @@ public:
     bool stop_udp_thread_ = false;
     bool stop_packets2fov_thread_ = false;
 
-    std::chrono::system_clock::time_point start_vec;
+    std::chrono::system_clock::time_point start_vec = std::chrono::system_clock::now();
     std::chrono::system_clock::time_point end_vec;
-
-    thread udp_thread;
-    thread packets_to_fov_thread;
+    
+    pthread_t udp_thread_p;
     LIDAR_CONFIG lidar_config_;
     int32_t lidar_idx_;
 
     // calibration
     Calibration calibration_;
     std::vector<SlamOffset> rpy_;
+
+    static void* ThreadEntryPoint(void* arg)
+    {
+        Parser<LidarUdpPacket>* parser = static_cast<Parser<LidarUdpPacket>*>(arg);
+        parser->ReceiveThreadDowork();
+        return nullptr;
+    }
+    void SetVerticalAngle(ModelId device_id, float angle)
+    {
+        switch (device_id)
+        {
+        case ModelId::G32:
+        {
+            int num_of_channel = 16;
+            top_bottom_offset = angle / (2 * num_of_channel);
+            float angle_start = -angle / 2 + top_bottom_offset / 2;
+
+            for (int32_t i = 0; i < num_of_channel; i++)
+            {
+                vertical_angle_arr_[i] = angle_start + (angle / num_of_channel) * i;
+                vertical_angle_arr_[i + 16] = angle_start + (angle / num_of_channel) * i + top_bottom_offset;
+            }
+        }
+        break;
+        default:
+            break;
+        }
+    }
 };
 
 template <class LidarUdpPacket>
@@ -82,8 +119,11 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     stop_packets2fov_thread_ = false;
 
     // Declare thread function for receive packet data through pcap or socket
-    udp_thread = std::thread(&Parser::ReceiveThreadDowork, this);
-    packets_to_fov_thread = std::thread(&Parser::ChangePacketsToFov, this);
+    struct sched_param param1;
+    int policy= SCHED_FIFO;
+    param1.sched_priority = sched_get_priority_max(policy);
+    pthread_create(&udp_thread_p, nullptr, &Parser<LidarUdpPacket>::ThreadEntryPoint, this);
+    pthread_setschedparam(udp_thread_p, policy, &param1);
 
     // Set calibration config
     std::filesystem::path currentPath = std::filesystem::current_path();
@@ -106,8 +146,7 @@ void Parser<LidarUdpPacket>::StopParserThread()
 {
     stop_packets2fov_thread_ = true;
     stop_udp_thread_ = true;
-    udp_thread.join();
-    packets_to_fov_thread.join();
+    pthread_join(udp_thread_p, nullptr);
 }
 
 //Socket Connect Function
@@ -237,26 +276,8 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
 
         lidar_udp_packet.DeSerializeUdpPacket(buffer, PACKET_DATA_SIZE);
         //3. accumulate packet data to packet_queue 
-        queue_mutex.lock();
+        ChangePacketsToFovSyn(lidar_udp_packet, lidar_idx_);
 
-            if (packet_queue.size() < 200)
-            {
-                packet_queue.push(lidar_udp_packet);                
-            }
-            //  else
-            //  {                
-            // //     std::ofstream outFile("debug.ini", std::ios::app);
-            // //     if(outFile.is_open())
-            // //     {
-            // //         outFile << "lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
-            // //     }
-            // //     outFile.close();
-            //     std::time_t now = std::time(nullptr);
-            //     char* dt = std::ctime(&now);
-            //     cout << dt << " / lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
-            //  }
-        
-        queue_mutex.unlock();
     }
     if (input_type_ == InputType::UDP)
     {
@@ -269,5 +290,127 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
     }
     RCLCPP_INFO(node_->get_logger(), "Stop Recv Packet");
 }
+
+template <class LidarUdpPacket>
+void Parser<LidarUdpPacket>::ChangePacketsToFovSyn(AutoLG32UdpPacket lidar_udp_packet, int32_t idx)
+{
+    vector<DataPoint> pcd_data;
+    //Change packet to Point Cloud
+    
+    end_vec = std::chrono::system_clock::now();
+    if ((chrono::duration_cast<chrono::microseconds>(end_vec - start_vec)).count() >= 1000000)
+    {
+        start_vec = std::chrono::system_clock::now();
+        last_fps = fps;
+        fps = 0;
+
+        last_lost_packet = lost_packet;
+    }
+    AutoLG32UdpPacket packet = lidar_udp_packet;
+
+    if (packet.header_.data_type_ != 0)
+    {
+        //Check the loss packet   
+        cur_packet_id = packet.header_.packet_id_;
+        if (cur_packet_id != (prev_packet_id + 1))
+        {
+            if (cur_packet_id != 0)
+            {
+                if (cur_packet_id - prev_packet_id > 0)
+                {
+                    num_of_lost_packet += cur_packet_id - prev_packet_id;
+                    lost_packet += cur_packet_id - prev_packet_id;
+                }
+                else
+                {
+                    lost_packet += (cur_packet_id - prev_packet_id) + 288;
+                    num_of_lost_packet += cur_packet_id - prev_packet_id + 288;
+                }
+            }
+        }
+
+        prev_packet_id = cur_packet_id;
+        if (packet.header_.data_type_ == 0xA5B3C2AA && packet.header_.packet_id_ != 0)
+        {
+            
+            //init configuration
+            if (is_first_fov_data)
+            {
+                stage_count = 0;
+
+                fov_data_arr_count_ = 0;
+                fov_data_set_t.clear();
+                lidar_id_vector_.clear();
+                fov_data_arr_count_ = 0;
+                is_first_fov_data = false;
+                last_lost_packet = 0;
+            }
+            else
+            {
+                SetVerticalAngle(ModelId::G32, vert_angle);
+                if (!(fov_data_set_t.size() == 0 && packet.header_.top_bottom_side_ == 1))
+                {
+                    
+                    packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
+                    frame_data.emplace_back(packet);
+                    stage_count++;
+                }
+                if (stage_count >= 2)
+                {
+
+                    update_count++;
+                    bool is_fov_ok = true;
+                    for (size_t i = 0; i < fov_data_set_t.size() / 2; i++)
+                    {
+                        if (fov_data_set_t[i].data_points_->vertical_angle_ == fov_data_set_t[i + fov_data_set_t.size() / 2].data_points_->vertical_angle_)
+                            is_fov_ok = false;
+                    }
+                    if (is_fov_ok)
+                    {
+                        if (packet.header_.lidar_info_.frame_rate <= 50)
+                        {
+                            frame_rate = packet.header_.lidar_info_.frame_rate;
+                            vertical_angle = packet.header_.lidar_info_.vertical_angle;
+                        }
+                        else
+                        {
+                            frame_rate = packet.header_.es_test_info_.frame_rate;
+                            vertical_angle = packet.header_.es_test_info_.vertical_angle;
+                        }
+                        
+                        //publish the packet data
+                        packet_callback_(frame_data, lidar_idx_);
+                        // packet to pcd 
+                        ChangeFovToPcd(fov_data_set_t, pcd_data);
+                        // publish the pcd data
+                        pcd_callback_(pcd_data, lidar_idx_);
+                        
+                        pcd_data.clear();
+                        fov_data_set_t.clear();
+                        frame_data.clear();                            
+                    }
+                    fps++;
+                    if (update_count == ULLONG_MAX)
+                    {
+                        update_count = 1;
+                    }
+                    lidar_id_vector_.clear();
+                    stage_count = 0;
+                    fov_data_arr_count_ = 0;
+                    fov_data_set_t.clear();
+                }
+            }
+        }
+
+        if (!(packet.header_.data_type_ == 0xA5B3C2AA))
+        {                
+            
+            SetVerticalAngle(ModelId::G32, vert_angle);
+            frame_data.emplace_back(packet);
+            packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
+        }
+    }
+}
+
 
 #endif
