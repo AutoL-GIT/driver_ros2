@@ -9,11 +9,7 @@ public:
     virtual ~G32Parser() {}
     virtual void ChangePacketsToFov();
     virtual void ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data);
-
 private:
-    float vertical_angle_arr_[32];
-    int data_points_size_;
-    float top_bottom_offset;
 };
 
 G32Parser::G32Parser()
@@ -64,18 +60,7 @@ void G32Parser::ChangePacketsToFov()
         queue_mutex.lock();
         //Get packet data from packet_queue
         if (!packet_queue.empty())
-        {
-            // if(packet_queue.size() > 100)
-            // {
-            //     cout << "lidar : pop " << lidar_idx_ << " " << packet_queue.size() << "\n";\
-
-            //     std::ofstream outFile("debug.ini", std::ios::app);
-            //     if(outFile.is_open())
-            //     {
-            //         outFile << "lidar pop : " << lidar_idx_ << " " << packet_queue.size() << "\n";
-            //     }
-            //     outFile.close();
-            // }
+        {            
             packet = packet_queue.front();
             packet_queue.pop();
         }
@@ -112,6 +97,7 @@ void G32Parser::ChangePacketsToFov()
 
             if (packet.header_.data_type_ == 0xA5B3C2AA && packet.header_.packet_id_ != 0)
             {
+                
                 //init configuration
                 if (is_first_fov_data)
                 {
@@ -126,6 +112,7 @@ void G32Parser::ChangePacketsToFov()
                 }
                 else
                 {
+                    
                     SetVerticalAngle(ModelId::G32, vert_angle);
                     if (!(fov_data_set_t.size() == 0 && packet.header_.top_bottom_side_ == 1))
                     {
@@ -134,13 +121,17 @@ void G32Parser::ChangePacketsToFov()
                         stage_count++;
                     }
                     if (stage_count >= 2)
-                    {
+                    {                        
                         update_count++;
                         bool is_fov_ok = true;
+                        
                         for (size_t i = 0; i < fov_data_set_t.size() / 2; i++)
                         {
                             if (fov_data_set_t[i].data_points_->vertical_angle_ == fov_data_set_t[i + fov_data_set_t.size() / 2].data_points_->vertical_angle_)
+                            {
                                 is_fov_ok = false;
+                                break;
+                            }
                         }
                         if (is_fov_ok)
                         {
@@ -160,11 +151,11 @@ void G32Parser::ChangePacketsToFov()
                             ChangeFovToPcd(fov_data_set_t, pcd_data);
                             // publish the pcd data
                             pcd_callback_(pcd_data, lidar_idx_);
+                            
                             // re-init
                             pcd_data.clear();
                             fov_data_set_t.clear();
                             frame_data.clear();
-                            frame_data.emplace_back(packet);
                         }
                         fps++;
                         if (update_count == ULLONG_MAX)
@@ -175,6 +166,7 @@ void G32Parser::ChangePacketsToFov()
                         stage_count = 0;
                         fov_data_arr_count_ = 0;
                         fov_data_set_t.clear();
+                        frame_data.clear();
                     }
                 }
             }
@@ -211,7 +203,8 @@ void G32Parser::ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t
             {
                 ApplyRPY(pos_x, pos_y, pos_z, lidar_idx_, calibration_.lidar_slamoffset_corrections);
             }
-            pcd_data.push_back({pos_x, pos_y, pos_z, intensity, (uint16_t)j, timestamp});
+            if(fov_data_set_t[i].data_points_[j].distance_ > 0)
+                pcd_data.push_back({pos_x, pos_y, pos_z, intensity, (uint16_t)j, timestamp});
         }
     }
 }

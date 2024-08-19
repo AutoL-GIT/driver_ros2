@@ -38,6 +38,7 @@ public:
     bool is_ready_input_;
     unsigned int fov_data_arr_count_ = 0;
     float top_bottom_offset;
+    int data_points_size_;
     float vertical_angle_arr_[32];
     float vert_angle = 10;
     unsigned int frame_rate = 25;
@@ -53,6 +54,10 @@ public:
     unsigned long long update_count = 0;
     vector<AutoLG32UdpPacket> frame_data;
     vector<int> lidar_id_vector_;
+    
+    thread udp_thread;
+    thread packets_to_fov_thread;
+
 
     // Pcap Variables
     pcap_t *pcap_;
@@ -69,6 +74,7 @@ public:
     std::chrono::system_clock::time_point end_vec;
     
     pthread_t udp_thread_p;
+    pthread_t packets_to_fov_thread_p;
     LIDAR_CONFIG lidar_config_;
     int32_t lidar_idx_;
 
@@ -80,6 +86,12 @@ public:
     {
         Parser<LidarUdpPacket>* parser = static_cast<Parser<LidarUdpPacket>*>(arg);
         parser->ReceiveThreadDowork();
+        return nullptr;
+    }
+    static void* ThreadEntryPoint2(void* arg)
+    {
+        Parser<LidarUdpPacket>* parser = static_cast<Parser<LidarUdpPacket>*>(arg);
+        parser->ChangePacketsToFov();
         return nullptr;
     }
     void SetVerticalAngle(ModelId device_id, float angle)
@@ -119,11 +131,21 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     stop_packets2fov_thread_ = false;
 
     // Declare thread function for receive packet data through pcap or socket
+    //udp_thread = std::thread(&Parser::ReceiveThreadDowork, this);
+    // packets_to_fov_thread = std::thread(&Parser::ChangePacketsToFov, this);
+
     struct sched_param param1;
     int policy= SCHED_FIFO;
     param1.sched_priority = sched_get_priority_max(policy);
     pthread_create(&udp_thread_p, nullptr, &Parser<LidarUdpPacket>::ThreadEntryPoint, this);
     pthread_setschedparam(udp_thread_p, policy, &param1);
+
+    struct sched_param param2;
+    int policy2= SCHED_FIFO;
+    param2.sched_priority = sched_get_priority_max(policy2);
+    pthread_create(&packets_to_fov_thread_p, nullptr, &Parser<LidarUdpPacket>::ThreadEntryPoint2, this);
+    pthread_setschedparam(packets_to_fov_thread_p, policy2, &param2);
+
 
     // Set calibration config
     std::filesystem::path currentPath = std::filesystem::current_path();
@@ -146,7 +168,9 @@ void Parser<LidarUdpPacket>::StopParserThread()
 {
     stop_packets2fov_thread_ = true;
     stop_udp_thread_ = true;
+    
     pthread_join(udp_thread_p, nullptr);
+    pthread_join(packets_to_fov_thread_p, nullptr);
 }
 
 //Socket Connect Function
@@ -273,10 +297,26 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
             memcpy(buffer, pkt_data + pcapHeaderSz, header->caplen);
             usleep(100); //for thread sync
         }
-
+        
         lidar_udp_packet.DeSerializeUdpPacket(buffer, PACKET_DATA_SIZE);
         //3. accumulate packet data to packet_queue 
-        ChangePacketsToFovSyn(lidar_udp_packet, lidar_idx_);
+        //ChangePacketsToFovSyn(lidar_udp_packet, lidar_idx_);
+        queue_mutex.lock();
+            if (packet_queue.size() < 200)
+            {                
+                packet_queue.push(lidar_udp_packet);                
+            }
+            else
+            {                
+            //     std::ofstream outFile("debug.ini", std::ios::app);
+            //     if(outFile.is_open())
+            //     {
+            //         outFile << "lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
+                std::time_t now = std::time(nullptr);
+                char* dt = std::ctime(&now);
+                cout << dt << " / lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
+            }
+        queue_mutex.unlock();
 
     }
     if (input_type_ == InputType::UDP)
@@ -363,7 +403,10 @@ void Parser<LidarUdpPacket>::ChangePacketsToFovSyn(AutoLG32UdpPacket lidar_udp_p
                     for (size_t i = 0; i < fov_data_set_t.size() / 2; i++)
                     {
                         if (fov_data_set_t[i].data_points_->vertical_angle_ == fov_data_set_t[i + fov_data_set_t.size() / 2].data_points_->vertical_angle_)
+                        {
                             is_fov_ok = false;
+                            break;
+                        }
                     }
                     if (is_fov_ok)
                     {
@@ -398,6 +441,7 @@ void Parser<LidarUdpPacket>::ChangePacketsToFovSyn(AutoLG32UdpPacket lidar_udp_p
                     stage_count = 0;
                     fov_data_arr_count_ = 0;
                     fov_data_set_t.clear();
+                    frame_data.clear();     
                 }
             }
         }
