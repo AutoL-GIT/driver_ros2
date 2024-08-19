@@ -6,6 +6,9 @@
 #include "udp_socket.hpp"
 #include "input/input_manager.hpp"
 #include "lidar_controller/lidar_controller.hpp"
+#include <pthread.h>
+#include <condition_variable>
+
 template <class LidarUdpPacket>
 class Parser : public LidarController
 {
@@ -30,6 +33,8 @@ public:
     InputType input_type_;
     queue<LidarUdpPacket> packet_queue;
     mutex queue_mutex;
+    mutex mtx;
+    condition_variable cv;
 
     int fps = 0;
     int last_fps = 0;
@@ -301,22 +306,14 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         lidar_udp_packet.DeSerializeUdpPacket(buffer, PACKET_DATA_SIZE);
         //3. accumulate packet data to packet_queue 
         //ChangePacketsToFovSyn(lidar_udp_packet, lidar_idx_);
-        queue_mutex.lock();
-            if (packet_queue.size() < 200)
-            {                
-                packet_queue.push(lidar_udp_packet);                
-            }
-            else
-            {                
-            //     std::ofstream outFile("debug.ini", std::ios::app);
-            //     if(outFile.is_open())
-            //     {
-            //         outFile << "lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
-                std::time_t now = std::time(nullptr);
-                char* dt = std::ctime(&now);
-                cout << dt << " / lidar push : " << lidar_idx_ << " " << packet_queue.size() << "\n";
-            }
-        queue_mutex.unlock();
+        //queue_mutex.lock();
+        unique_lock<mutex> lock(mtx);
+        if (packet_queue.size() < 200)
+        {                
+            packet_queue.push(lidar_udp_packet);                
+        }
+        //queue_mutex.unlock();
+        cv.notify_one();
 
     }
     if (input_type_ == InputType::UDP)
@@ -422,7 +419,7 @@ void Parser<LidarUdpPacket>::ChangePacketsToFovSyn(AutoLG32UdpPacket lidar_udp_p
                         }
                         
                         //publish the packet data
-                        packet_callback_(frame_data, lidar_idx_);
+                        //packet_callback_(frame_data, lidar_idx_);
                         // packet to pcd 
                         ChangeFovToPcd(fov_data_set_t, pcd_data);
                         // publish the pcd data
