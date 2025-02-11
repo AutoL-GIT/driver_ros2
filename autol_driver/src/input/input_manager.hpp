@@ -1,7 +1,6 @@
 #ifndef INPUT_MANAGER_HPP
 #define INPUT_MANAGER_HPP
 #include "define.hpp"
-#include "packet_structure/g32_packet_structure.hpp"
 #include "lidar_controller/lidar_controller.hpp"
 class InputManager
 {
@@ -10,8 +9,10 @@ protected:
     LIDAR_CONFIG lidar_config_;
     int32_t lidar_idx_;
     // Callback Function 
-    std::function<void(const G32FrameData_t&, int32_t)> packet_callback_;
-    std::function<void(const G32PointData&, int32_t)> pcd_callback_;
+    std::function<void(const G32FrameData_t&, int32_t)> packet_g32_callback_;
+    std::function<void(const G32V2FrameData_t&, int32_t)> packet_g32_v2_callback_;
+    std::function<void(const S56FrameData_t&, int32_t)> packet_s56_callback_;
+    std::function<void(const PointData&, int32_t)> pcd_callback_;
     //lidar controller class
     LidarController *lidar_ctrl_ptr_;
 public:
@@ -24,8 +25,10 @@ public:
     void SetRosNode(rclcpp::Node *node){ node_ = node;}
     //Assign packet data callback function
     void RegRecvCallback(const std::function<void(const G32FrameData_t&, int32_t)>& callback);
+    void RegRecvCallback(const std::function<void(const G32V2FrameData_t&, int32_t)>& callback);
+    void RegRecvCallback(const std::function<void(const S56FrameData_t&, int32_t)>& callback);
     //Assign pcd data callback function
-    void RegRecvPcdCallback(const std::function<void(const G32PointData&, int32_t)>& callback);
+    void RegRecvPcdCallback(const std::function<void(const PointData&, int32_t)>& callback);
     InputManager(LIDAR_CONFIG &lidar_config, int32_t lidar_idx)
     {
         lidar_config_ = lidar_config;
@@ -41,11 +44,19 @@ public:
 //Packet Callback
 void InputManager::RegRecvCallback(const std::function<void(const G32FrameData_t&, int32_t)>& callback)
 {
-    packet_callback_ = callback;
+    packet_g32_callback_ = callback;
+}
+void InputManager::RegRecvCallback(const std::function<void(const G32V2FrameData_t&, int32_t)>& callback)
+{
+    packet_g32_v2_callback_ = callback;
+}
+void InputManager::RegRecvCallback(const std::function<void(const S56FrameData_t&, int32_t)>& callback)
+{
+    packet_s56_callback_ = callback;
 }
 
 //Point Cloud Callback
-void InputManager::RegRecvPcdCallback(const std::function<void(const G32PointData&, int32_t)>& callback)
+void InputManager::RegRecvPcdCallback(const std::function<void(const PointData&, int32_t)>& callback)
 {
     pcd_callback_ = callback;
 }

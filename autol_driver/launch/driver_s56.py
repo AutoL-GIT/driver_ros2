@@ -8,8 +8,8 @@ import launch
 
 ################### user configure parameters for ros2 start ###################
 manufacture_id = 'autol'
-model_id = 'G32'
-data_format_version = 2
+model_id = 'S56'
+data_format_version = 1
 input_type = 1
 
 lidar_count = 1
@@ -20,8 +20,8 @@ lidar_port_4 = 5004
 lidar_port_5 = 5005
 lidar_port_6 = 5006
 
-pcap_path = '/home/autol/data/2024-04-23-16-43-06_AutoL_Point_Data.pcap'
-frame_rate = 10
+pcap_path = '/home/autol/data/2025-01-03-14-20-58_AutoLS56_Point_Data.pcap'
+frame_rate = 20
 packet_per_frame = 0
 read_once = 0
 read_fast = 1

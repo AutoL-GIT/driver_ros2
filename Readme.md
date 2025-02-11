@@ -81,10 +81,9 @@ $ source install/setup.bash
 
 #### 3.1 Node
 
-| Node name  | Description                                                  |
-| ---------- | :----------------------------------------------------------- |
-| pub_frame_ | Receive the UDP Packets from the LiDAR Sensor, Package them into frame(one scene) unit, and deliver(publish). |
-| pub_pcd_   | Receive the Subscribes to frame unit packet data, transforms data into a 3D Cartesian coordinate system (pointcloud2). |
+| Node name             | Description                                                  |
+| --------------------- | :----------------------------------------------------------- |
+| autol_lidar_publisher | Receive the UDP Packets from the LiDAR Sensor, Package them into frame(one scene) unit, and transforms data into a 3D Cartesian coordinate system. |
 
 #### 3.2 Topic
 
@@ -102,7 +101,7 @@ $ source install/setup.bash
 
 | launch file name | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
-| driver.py        | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz)<br />3. Path<br />   - autol_driver/driver.py #if you modify this file, you must compile the code<br />   - autol_driver/install/driver.py #if you modify this file, you should not compile the code. but the content does not  apply source code <br /> |
+| driver.py        | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz)<br />3. Path<br />   - autol_driver/driver.py #if you modify this file, you must compile the code<br />   - autol_driver/install/driver.py #if you modify this file, you should not compile the code. but the content does not  apply source code <br />   ※ The driver_g32.py and driver_s56.py files are defined, so you can use them as needed. <br />|
 
 
 
@@ -110,30 +109,30 @@ $ source install/setup.bash
 
 ##### 1. auto_driver parameter
 
-| Parameter        | Detailed description                                         | Default       |
-| ---------------- | ------------------------------------------------------------ | ------------- |
-| manufature_id    | Set the Lidar manufacture id                                 | autol         |
-| model_id         | Supported LiDAR models are listed in the README file.        | G32           |
-| input_type       | Set the source of LiDAR packets<br />0 -- Unused . Never set this parameter to 0.<br />1 -- LiDAR packets come frome on-line LiDAR<br />2 -- LiDAR packets come from a PCAP | 1             |
-| frame_rate       | Set the frequency of point cloud publish Floating-point data type. | 25 (unit: Hz) |
-| lidar_count      | Set the num of lidar                                         | 1             |
-| lidar_port_1     | Set the First Lidar communication packet port.               | 5001          |
-| lidar_port_2     | Set the Second Lidar communication packet port.              | 5002          |
-| ⁞                | ⁞                                                            | ⁞             |
-| lidar_port_6     | Set the Sixth Lidar communication packet port.               | 5006          |
-| pcap_path        | The full path of the PCAP file. Valid if input_type = 2.     | " "           |
-| packet_per_frame | Set the num of packet per frame, recommended values 180.     | 180           |
-| read_once        | Variables that determine whether to read the pcap file repeatedly or once | 0             |
-| read_fast        | Adjust the pcap read speed more faster                       | 0             |
-| repeat_delay     | Adjust the pcap read speed more slower                       | 0             |
-| calibration      | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />False -- unused slam offset <br />True -- used slam offset<br />  ※ Calibration values can be set in the 'autol_driver/params/slam_offset.yaml' file | False         |
+| Parameter           | Detailed description                                         | Default       |
+| ------------------- | ------------------------------------------------------------ | ------------- |
+| manufature_id       | Set the Lidar manufacture id                                 | autol         |
+| model_id            | Supported LiDAR models are listed in the README file.        | G32           |
+| data_format_version | Set data format version.(The latest version of G32 is 2)     | 1             |
+| input_type          | Set the source of LiDAR packets<br />0 -- Unused . Never set this parameter to 0.<br />1 -- LiDAR packets come frome on-line LiDAR<br />2 -- LiDAR packets come from a PCAP | 1             |
+| lidar_count         | Set the num of lidar                                         | 1             |
+| lidar_port_1        | Set the First Lidar communication packet port.               | 5001          |
+| lidar_port_2        | Set the Second Lidar communication packet port.              | 5002          |
+| ⁞                   | ⁞                                                            | ⁞             |
+| lidar_port_6        | Set the Sixth Lidar communication packet port.               | 5006          |
+| pcap_path           | The full path of the PCAP file. Valid if input_type = 2.     | " "           |
+| frame_rate          | Set the frequency of point cloud publish Floating-point data type. | 0 (unit: Hz) |
+| packet_per_frame    | Set the num of packet per frame.                             | 0 (Auto Def.)      |
+| read_once           | Variables that determine whether to read the pcap file repeatedly or once | 0             |
+| read_fast           | Adjust the pcap read speed more faster                       | 1             |
+| calibration         | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />False -- unused slam offset <br />True -- used slam offset<br />  ※ Calibration values can be set in the 'autol_driver/params/slam_offset.yaml' file | False         |
 
 ```python
 #Example of setting the parameters of driver launch file 
 manufacture_id = 'autol'
 model_id = 'G32'
+data_format_version = 2
 input_type = 1
-frame_rate = 25
 
 lidar_count = 1
 lidar_port_1 = 5001
@@ -144,10 +143,10 @@ lidar_port_5 = 5005
 lidar_port_6 = 5006
 
 pcap_path = ''
-packet_per_frame = 180
+frame_rate = 0
+packet_per_frame = 0
 read_once = 0
-read_fast = 0
-repeat_delay = 0.0
+read_fast = 1
 calibration = True
 ```
 

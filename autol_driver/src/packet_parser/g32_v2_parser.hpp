@@ -1,18 +1,19 @@
-#ifndef G32_PCAP_PARSER_HPP
-#define G32_PCAP_PARSER_HPP
+#ifndef G32_V2_PCAP_PARSER_HPP
+#define G32_V2_PCAP_PARSER_HPP
 #include "packet_parser/parser_manager.hpp"
 
-class G32Parser : public Parser<AutoLG32UdpPacket>
+class G32V2Parser : public Parser<AutoLG32V2UdpPacket>
 {
 public:
-    G32Parser();
-    virtual ~G32Parser() {}
+    G32V2Parser();
+    virtual ~G32V2Parser() {}
     virtual void ChangePacketsToFov();
-    virtual void ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data);
+    
+    void ChangeFovToPcd(std::vector<AutoLG32V2FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data);
 private:
 };
 
-G32Parser::G32Parser()
+G32V2Parser::G32V2Parser()
 {
     data_points_size_ = 16;
     int angle = 10;
@@ -28,8 +29,7 @@ G32Parser::G32Parser()
         vertical_angle_arr_[i + 16] = angle_start + (angle / num_of_channel) * i + top_bottom_offset;
     }
 }
-
-void G32Parser::ChangePacketsToFov()
+void G32V2Parser::ChangePacketsToFov()
 {
     long long cur_packet_id = 0;
     long long prev_packet_id = 0;
@@ -37,8 +37,8 @@ void G32Parser::ChangePacketsToFov()
     bool is_first_fov_data = true;
     int stage_count = 0;
     unsigned long long update_count = 0;
-    vector<AutoLG32FovDataBlock> fov_data_set_t;
-    vector<AutoLG32UdpPacket> frame_data;
+    vector<AutoLG32V2FovDataBlock> fov_data_set_t;
+    vector<AutoLG32V2UdpPacket> frame_data;
     vector<DataPoint> pcd_data;
     vector<int> lidar_id_vector_;
     start_vec = std::chrono::system_clock::now();
@@ -56,22 +56,7 @@ void G32Parser::ChangePacketsToFov()
 
             last_lost_packet = lost_packet;
         }
-        AutoLG32UdpPacket packet;
-        // queue_mutex.lock();
-        // //Get packet data from packet_queue
-        // if (!packet_queue.empty())
-        // {            
-        //     packet = packet_queue.front();
-        //     packet_queue.pop();
-        // }
-        // else
-        // {
-        //     queue_mutex.unlock();
-        //     usleep(20);
-        //     continue;
-        // }
-        // queue_mutex.unlock();
-
+        AutoLG32V2UdpPacket packet;
         unique_lock<mutex> lock(mtx);;
 
         cv.wait(lock, [this]{return !packet_queue.empty();});
@@ -143,8 +128,9 @@ void G32Parser::ChangePacketsToFov()
                             }
                             if (is_fov_ok)
                             {
+                                
                                 if (packet.header_.lidar_info_.frame_rate <= 50)
-                                {
+                                {                                    
                                     frame_rate = packet.header_.lidar_info_.frame_rate;
                                     vertical_angle = packet.header_.lidar_info_.vertical_angle;
                                 }
@@ -154,7 +140,7 @@ void G32Parser::ChangePacketsToFov()
                                     vertical_angle = packet.header_.es_test_info_.vertical_angle;
                                 }
                                 //publish the packet data
-                                //packet_callback_(frame_data, lidar_idx_);
+                                packet_g32_v2_ctrl_callback_(frame_data, lidar_idx_);
                                 // packet to pcd 
                                 ChangeFovToPcd(fov_data_set_t, pcd_data);
                                 // publish the pcd data
@@ -190,7 +176,7 @@ void G32Parser::ChangePacketsToFov()
     }
 }
 
-void G32Parser::ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data)
+void G32V2Parser::ChangeFovToPcd(std::vector<AutoLG32V2FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data)
 {
     const int32_t numOfChannel = 16;
     float intensity = 0;
@@ -206,7 +192,7 @@ void G32Parser::ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t
             intensity = fov_data_set_t[i].data_points_[j].reflectivity_;
             ConvertPolorToOrthCood((float)fov_data_set_t[i].data_points_[j].distance_,
                                    fov_data_set_t[i].data_points_[j].vertical_angle_,
-                                   fov_data_set_t[i].azimuth_, pos_x, pos_y, pos_z, 0);
+                                   fov_data_set_t[i].azimuth_, pos_x, pos_y, pos_z, 0, 256.0);
             // calibration
             if (lidar_config_.calibration == true)
             {

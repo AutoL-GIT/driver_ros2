@@ -23,6 +23,7 @@ int main(int argc, char **argv) // Node Main Function
   std::unique_lock<std::mutex> lck(g_mtx);
   g_cv.wait(lck);
   
+
   rclcpp::shutdown();
   RCLCPP_INFO(autol_driver->get_logger(), "Close the AutoL ROS Driver");
   return 0;
