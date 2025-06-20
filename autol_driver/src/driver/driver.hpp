@@ -7,6 +7,7 @@
 #include "input/input_pcap.hpp"
 
 #include <sstream>
+#include <chrono>
 
 class AutolDriver : public rclcpp::Node
 {
@@ -274,9 +275,16 @@ inline void AutolDriver::SendPacketS56(const S56FrameData_t &fov_data_set, int32
 
 inline void AutolDriver::SendPcdData(const PointData &point_cloud, int32_t lidar_idx)
 {
-  std::thread pcd_publish_thread(&AutolDriver::PcdPublishThreadDowork, this, point_cloud, std::ref(lidar_idx));
-  pcd_publish_thread.detach();
-  return;
+  if(true)
+  {
+    std::thread pcd_publish_thread(&AutolDriver::PcdPublishThreadDowork, this, point_cloud, std::ref(lidar_idx));
+    pcd_publish_thread.detach();
+    return;
+  }
+  else
+  {
+    PcdPublishThreadDowork(point_cloud, lidar_idx);
+  }
 }
 
 void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t lidar_idx)
@@ -329,13 +337,38 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
 
   ros_msg_.header.frame_id = "autol_lidar";
 
-  pub_pcd_[lidar_idx].reset();
-  std::ostringstream oss_2;
-  oss_2 << "autol_pointcloud_" << lidar_idx + 1;
-  std::string poin_cloud = oss_2.str();;
-  pub_pcd_[lidar_idx] = node_.create_publisher<sensor_msgs::msg::PointCloud2>(poin_cloud, 10);
+  if(true)
+  {
+    pub_pcd_[lidar_idx].reset();
+    std::ostringstream oss_2;
+    oss_2 << "autol_pointcloud_" << lidar_idx + 1;
+    std::string poin_cloud = oss_2.str();;
+    pub_pcd_[lidar_idx] = node_.create_publisher<sensor_msgs::msg::PointCloud2>(poin_cloud, 10);
 
-  pub_pcd_[lidar_idx]->publish(ros_msg_);
+    pub_pcd_[lidar_idx]->publish(ros_msg_);
+  }
+  else
+  {
+    ros_msg_.header.stamp = node_.now();
+    pub_pcd_[lidar_idx]->publish(std::move(ros_msg_));
+  }
+
+
+  if(false)
+  {
+    static int call_count= 0;
+    static auto last_time = std::chrono::steady_clock::now();
+    ++call_count;
+    auto now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = now - last_time;
+
+    if(elapsed.count() >=1.0)
+    {
+      cout << call_count<<endl;
+      call_count = 0;
+      last_time = now;
+    }
+  }
 }
 
 #endif

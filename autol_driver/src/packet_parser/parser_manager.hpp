@@ -119,11 +119,21 @@ public:
         break;
         case ModelId::S56:
         {            
+            // int num_of_channel = 56;
+            // //std::cout << num_of_channel << std::endl;
+            // for (size_t i = 0; i < num_of_channel; i++)
+            // {
+            //     vertical_angle_arr_[i] = -15 + ((float)30 / (56 - 1)) * i;
+            // }
             int num_of_channel = 56;
-            //std::cout << num_of_channel << std::endl;
+
+            double vert_resolution = angle / (num_of_channel - 1);
+
+            float angle_start = -angle / 2;
+
             for (size_t i = 0; i < num_of_channel; i++)
             {
-                vertical_angle_arr_[i] = -15 + ((float)30 / (56 - 1)) * i;
+                vertical_angle_arr_[i] = angle_start + vert_resolution * i;
             }
         }
         break;

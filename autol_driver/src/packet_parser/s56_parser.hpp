@@ -24,139 +24,143 @@ S56Parser::S56Parser()
 
 void S56Parser::ChangePacketsToFov()
 {
-    long long cur_packet_id = 0;
-    long long prev_packet_id = 0;
-    long long num_of_lost_packet = 0;
-    bool is_first_fov_data = true;
-    int stage_count = 0;
-    unsigned long long update_count = 0;
-    vector<AutoLS56FovDataBlock> fov_data_set_t;
-    vector<AutoLS56UdpPacket> frame_data;
     vector<DataPoint> pcd_data;
-    vector<int> lidar_id_vector_;
-    start_vec = std::chrono::system_clock::now();
-    //Change packet to Point Cloud
-    while (stop_packets2fov_thread_ == false)
-    {
-        this_thread::yield();
+    vector<AutoLS56UdpPacket> frame_data;
 
-        end_vec = std::chrono::system_clock::now();
+    long long cur_packet_id = 0;
+	long long prev_packet_id = 0;
+	long long num_of_lost_packet = 0;
+	bool is_packet_lost = false;
+	bool is_first_fov_data = true;
+	int stage_count = 0;
+	long lost_packet_cnt = 0;
+	unsigned long long update_count = 0;
+	unsigned long long motor_rpm = 0;
+	unsigned long long voltage_data = 0;
+	unsigned long long voltage_fraction = 0;
+	int32_t ground_z_axis_value = 0;
+	//NetLogger::GetInstance()->logger_->critical("{}", "PacketsToFov Start : " + to_string(thread_id));
+
+	vector<AutoLS56FovDataBlock> fov_data_set_t(192 * 3); 
+
+
+	for (size_t i = 0; i < fov_data_set_t.size(); i++)
+	{
+		fov_data_set_t[i].azimuth_ = 60 - 0.625 * (i / 3 );
+		for (size_t j = 0; j < 56; j++)
+		{
+			fov_data_set_t[i].data_points_[j].distance_ = 0.0;
+			fov_data_set_t[i].data_points_[j].reflectivity_ = 0.0;
+		}
+	}
+
+	vector<timeval> time_stamp_vector;
+	time_stamp_vector.reserve(10000);
+	vector<int> lidar_id_vector_;
+    
+	
+	start_vec = std::chrono::system_clock::now();
+	while (stop_packets2fov_thread_ == false)
+	{
+		this_thread::yield();
+
+		end_vec = std::chrono::system_clock::now();
         if ((chrono::duration_cast<chrono::microseconds>(end_vec - start_vec)).count() >= 1000000)
-        {
-            start_vec = std::chrono::system_clock::now();
-            last_fps = fps;
-            fps = 0;
+		{
+			start_vec = std::chrono::system_clock::now();
+			last_fps = fps;
+			fps = 0;
+			last_lost_packet = lost_packet;
+		}
+		AutoLS56UdpPacket packet = { 0, };
 
-            last_lost_packet = lost_packet;
-        }
-        AutoLS56UdpPacket packet;
-        unique_lock<mutex> lock(mtx);;
-
+        unique_lock<mutex> lock(mtx);
         cv.wait(lock, [this]{return !packet_queue.empty();});
         while(!packet_queue.empty())
         {
-            packet = packet_queue.front();
-            packet_queue.pop();
-            
-            if (packet.header_.data_type_ != 0)
+             packet = packet_queue.front();
+             packet_queue.pop();
+
+            cur_packet_id = packet.header_.packet_number;
+            if (cur_packet_id != (prev_packet_id + 1))
             {
-                //Check the loss packet   
-                cur_packet_id = packet.header_.packet_id_;
-                if (cur_packet_id != (prev_packet_id + 1))
+                if (cur_packet_id != 0)
                 {
-                    if (cur_packet_id != 0)
+                    if (cur_packet_id - prev_packet_id > 0)
                     {
-                        if (cur_packet_id - prev_packet_id > 0)
-                        {
-                            num_of_lost_packet += cur_packet_id - prev_packet_id;
-                            lost_packet += cur_packet_id - prev_packet_id;
-                        }
-                        else
-                        {
-                            lost_packet += (cur_packet_id - prev_packet_id) + 288;
-                            num_of_lost_packet += cur_packet_id - prev_packet_id + 288;
-                        }
-                    }
-                }
-
-                prev_packet_id = cur_packet_id;
-
-                if (packet.header_.data_type_ == 0xA5B3C2AA && packet.header_.packet_id_ != 0)
-                {
-                    
-                    //init configuration
-                    if (is_first_fov_data)
-                    {
-                        stage_count = 0;
-
-                        fov_data_arr_count_ = 0;
-                        fov_data_set_t.clear();
-                        lidar_id_vector_.clear();
-                        fov_data_arr_count_ = 0;
-                        is_first_fov_data = false;
-                        last_lost_packet = 0;
+                        num_of_lost_packet += cur_packet_id - prev_packet_id;
+                        lost_packet += cur_packet_id - prev_packet_id;
                     }
                     else
                     {
-                        SetVerticalAngle(ModelId::S56, vert_angle);
-                        //if (!(fov_data_set_t.size() == 0 && packet.header_.top_bottom_side_ == 1))
-                        {
-                            packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
-                            frame_data.emplace_back(packet);
-                            stage_count++;
-                        }
-                        //if (stage_count >= 2)
-                        {                        
-                            update_count++;
-                            bool is_fov_ok = true;
-                            
-                            if (is_fov_ok)
-                            {
-                                if (packet.header_.lidar_info_.frame_rate <= 50)
-                                {
-                                    frame_rate = packet.header_.lidar_info_.frame_rate;
-                                    vertical_angle = packet.header_.lidar_info_.vertical_angle;
-                                }
-                                else
-                                {
-                                    frame_rate = packet.header_.es_test_info_.frame_rate;
-                                    vertical_angle = packet.header_.es_test_info_.vertical_angle;
-                                }
-                                //publish the packet data
-                                //packet_s56_ctrl_callback_(frame_data, lidar_idx_);
-                                // packet to pcd 
-                                ChangeFovToPcd(fov_data_set_t, pcd_data);
-                                // publish the pcd data
-                                pcd_callback_(pcd_data, lidar_idx_);
-                                
-                                // re-init
-                                pcd_data.clear();
-                                fov_data_set_t.clear();
-                                frame_data.clear();
-                            }
-                            fps++;
-                            if (update_count == ULLONG_MAX)
-                            {
-                                update_count = 1;
-                            }
-                            lidar_id_vector_.clear();
-                            stage_count = 0;
-                            fov_data_arr_count_ = 0;
-                            fov_data_set_t.clear();
-                            frame_data.clear();
-                        }
+                        lost_packet += (cur_packet_id - prev_packet_id) + 288;
+                        num_of_lost_packet += cur_packet_id - prev_packet_id + 288;
                     }
-                }
-
-                if (!(packet.header_.data_type_ == 0xA5B3C2AA))
-                {
-                    SetVerticalAngle(ModelId::S56, vert_angle);
-                    frame_data.emplace_back(packet);
-                    packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
+                    is_packet_lost = true;
                 }
             }
+
+            prev_packet_id = cur_packet_id;
+
+            if (packet.header_.packet_number == 167)
+            {
+                update_count++;
+                if (is_first_fov_data)
+                {
+                    stage_count = 0;
+
+                    fov_data_arr_count_ = 0;
+                    //fov_data_set_t.clear();
+                    //time_stamp_vector.clear();
+                    lidar_id_vector_.clear();
+                    fov_data_arr_count_ = 0;
+                    is_first_fov_data = false;
+                    last_lost_packet = 0;
+                }
+                else
+                {
+                    SetVerticalAngle(ModelId::S56, 14.7321428571429 * 2);
+
+                    packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
+                    frame_data.emplace_back(packet);
+
+
+                    //publish the packet data
+                    //packet_s56_ctrl_callback_(frame_data, lidar_idx_);
+                    // packet to pcd 
+                    ChangeFovToPcd(fov_data_set_t, pcd_data);
+                    // publish the pcd data
+                    pcd_callback_(pcd_data, lidar_idx_);
+
+                    // re-init
+                    pcd_data.clear();
+                    //fov_data_set_t.clear();
+                    frame_data.clear();
+
+
+                    fps++;
+                    if (update_count == std::numeric_limits<uint64_t>::max())
+                        update_count = 1;
+
+                    is_packet_lost = false;
+                    lidar_id_vector_.clear();
+                    fov_data_arr_count_ = 0;
+                }
+            }
+            else
+            {
+                SetVerticalAngle(ModelId::S56, 14.7321428571429 * 2);
+                packet.AddDataBlockToFovDataSet(fov_data_set_t, top_bottom_offset, lidar_id_vector_, vertical_angle_arr_, fov_data_arr_count_);
+                frame_data.emplace_back(packet);
+            }
         }
-    }
+	}
+
+	if (stop_udp_thread_ == true)
+	{
+		fps = 0;
+		last_fps = 0;
+	}
 }
 
 void S56Parser::ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data)
@@ -175,7 +179,7 @@ void S56Parser::ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t
             intensity = fov_data_set_t[i].data_points_[j].reflectivity_;
             ConvertPolorToOrthCood((float)fov_data_set_t[i].data_points_[j].distance_,
                                    fov_data_set_t[i].data_points_[j].vertical_angle_,
-                                   fov_data_set_t[i].azimuth_, pos_x, pos_y, pos_z, 0, 256/0.3);
+                                   fov_data_set_t[i].azimuth_, pos_x, pos_y, pos_z, 0, 128);
             // calibration
             if (lidar_config_.calibration == true)
             {
