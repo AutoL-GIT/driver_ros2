@@ -124,44 +124,6 @@ public:
 				fov_data_arr_count_++;
 
 		}
-
-	// 	AutoLS56FovDataBlock fov_data_block[24];
-
-	// 	if (header_.top_bottom_side_ == 0)
-	// 		for (size_t i = 0; i < _countof(data_block_); i++)
-	// 		{
-	// 			fov_data_block[i].azimuth_ = (float)data_block_[i].azimuth_ / 1000;
-
-	// 			for (size_t j = 0; j < _countof(DataBlockAutoLS56::channel_data_); j++)
-	// 			{
-	// 				fov_data_block[i].data_points_[j].distance_ = (unsigned int)data_block_[i].channel_data_[j].tof_;
-	// 				fov_data_block[i].data_points_[j].echo_pulse_width_ = data_block_[i].channel_data_[j].intensity_;
-	// 				fov_data_block[i].data_points_[j].vertical_angle_ = vertical_angle_arr_[j];
-	// 			}
-	// 			fov_data_set.emplace_back(fov_data_block[i]);
-	// 			lidar_id_vector.emplace_back(1);
-
-	// 			fov_data_arr_count_++;
-	// 		}
-	// 	if (header_.top_bottom_side_ == 1)
-	// 		for (size_t i = 0; i < _countof(data_block_); i++)
-	// 		{
-	// 			if ((float)data_block_[i].azimuth_ == 0)
-	// 				continue;
-
-	// 			fov_data_block[i].azimuth_ = (float)data_block_[i].azimuth_ / 1000;
-	// 			for (size_t j = 0; j < _countof(DataBlockAutoLS56::channel_data_); j++)
-	// 			{
-	// 				fov_data_block[i].data_points_[j].distance_ = (unsigned int)data_block_[i].channel_data_[j].tof_;
-	// 				fov_data_block[i].data_points_[j].echo_pulse_width_ = data_block_[i].channel_data_[j].intensity_;
-	// 				fov_data_block[i].data_points_[j].vertical_angle_ = vertical_angle_arr_[j] + top_bottom_angle_offset;
-	// 			}
-	// 			fov_data_set.emplace_back(fov_data_block[i]);
-
-	// 			lidar_id_vector.emplace_back(1);
-
-	// 			fov_data_arr_count_++;
-	// 		}
 	}
 };
 #pragma pack(pop)
