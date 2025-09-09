@@ -10,7 +10,7 @@ import launch
 manufacture_id = 'autol'
 model_id = 'G32'
 data_format_version = 1
-input_type = 2
+input_type = 1
 
 lidar_count = 1
 lidar_port_1 = 5001

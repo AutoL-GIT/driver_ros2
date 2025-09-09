@@ -306,7 +306,8 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
   offset = addPointField(ros_msg_, "z", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
   offset = addPointField(ros_msg_, "intensity", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
   offset = addPointField(ros_msg_, "ring", 1, sensor_msgs::msg::PointField::UINT16, offset);
-  offset = addPointField(ros_msg_, "timestamp", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
+  offset = addPointField(ros_msg_, "timestampsec", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
+  offset = addPointField(ros_msg_, "timestampnsec", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
   ros_msg_.point_step = offset;    
   ros_msg_.row_step = ros_msg_.width * ros_msg_.point_step;
   ros_msg_.is_dense = false;
@@ -316,7 +317,8 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
   sensor_msgs::PointCloud2Iterator<float> iter_z_(ros_msg_, "z");
   sensor_msgs::PointCloud2Iterator<float> iter_intensity_(ros_msg_, "intensity");
   sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring_(ros_msg_, "ring");
-  sensor_msgs::PointCloud2Iterator<double> iter_timestamp_(ros_msg_, "timestamp");
+  sensor_msgs::PointCloud2Iterator<double> iter_timestamp_(ros_msg_, "timestampsec");
+  sensor_msgs::PointCloud2Iterator<double> iter_timestamp_nsec_(ros_msg_, "timestampnsec");
 
   for (int32_t iIdxJ = 0; iIdxJ < (int32_t)point_cloud.size(); iIdxJ++)
   {
@@ -326,13 +328,15 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
     *iter_z_ = point.z;
     *iter_intensity_ = point.intensity;
     *iter_ring_ = point.ring;
-    *iter_timestamp_ = point.timestamp;
+    *iter_timestamp_ = point.timestamp_sec;
+    *iter_timestamp_nsec_ = point.timestamp_nsec;
     ++iter_x_;
     ++iter_y_;
     ++iter_z_;
     ++iter_intensity_;
     ++iter_ring_;
     ++iter_timestamp_;
+    ++iter_timestamp_nsec_;
   }
 
   ros_msg_.header.frame_id = "autol_lidar";

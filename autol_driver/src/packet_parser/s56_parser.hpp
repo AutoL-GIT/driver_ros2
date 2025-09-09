@@ -9,7 +9,7 @@ public:
     virtual ~S56Parser() {}
     virtual void ChangePacketsToFov();
     
-    void ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data);
+    void ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data, uint32_t timeStampSec = 0, uint32_t timeStampnSec = 0);
 private:
 };
 
@@ -128,7 +128,34 @@ void S56Parser::ChangePacketsToFov()
                     //publish the packet data
                     //packet_s56_ctrl_callback_(frame_data, lidar_idx_);
                     // packet to pcd 
-                    ChangeFovToPcd(fov_data_set_t, pcd_data);
+
+                    // packet.header_.utc_time[0] = 25;
+                    // packet.header_.utc_time[1] = 8;
+                    // packet.header_.utc_time[2] = 19;
+                    // packet.header_.utc_time[3] = 15;
+                    // packet.header_.utc_time[4] = 56;
+                    // packet.header_.utc_time[5] = 11;
+
+                    std::tm t = {};
+                    t.tm_year = (2000 + (int)packet.header_.utc_time[0]) - 1900;
+                    t.tm_mon = (int)packet.header_.utc_time[1] - 1;
+                    t.tm_mday = packet.header_.utc_time[2];
+                    t.tm_hour = packet.header_.utc_time[3];
+                    t.tm_min = packet.header_.utc_time[4];
+                    t.tm_sec = packet.header_.utc_time[5];
+                    std::time_t tt = std::mktime(&t);
+                    uint32_t timeStampSec = static_cast<double>(tt);
+                    uint32_t timeStampuSec = packet.header_.time_stamp;
+
+                    // std::tm* tm_ptr = std::localtime(&tt);
+                    // cout<< (tm_ptr->tm_year +1900) << " " 
+                    // <<(tm_ptr->tm_mon +1) << " " 
+                    // << tm_ptr->tm_mday << " "
+                    // <<tm_ptr->tm_hour << " "
+                    // <<tm_ptr->tm_min << " " 
+                    // << tm_ptr->tm_sec << endl;
+
+                    ChangeFovToPcd(fov_data_set_t, pcd_data, timeStampSec, packet.header_.time_stamp);
                     // publish the pcd data
                     pcd_callback_(pcd_data, lidar_idx_);
 
@@ -163,7 +190,7 @@ void S56Parser::ChangePacketsToFov()
 	}
 }
 
-void S56Parser::ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data)
+void S56Parser::ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t, std::vector<DataPoint> &pcd_data, uint32_t timeStampSec, uint32_t timeStampnSec)
 {
     const int32_t numOfChannel = 56;
     float intensity = 0;
@@ -186,7 +213,7 @@ void S56Parser::ChangeFovToPcd(std::vector<AutoLS56FovDataBlock> &fov_data_set_t
                 ApplyRPY(pos_x, pos_y, pos_z, lidar_idx_, calibration_.lidar_slamoffset_corrections);
             }
             if(fov_data_set_t[i].data_points_[j].distance_ > 0)
-                pcd_data.push_back({pos_x, pos_y, pos_z, intensity, (uint16_t)j, timestamp});
+                pcd_data.push_back({pos_x, pos_y, pos_z, intensity, (uint16_t)j, 0.0, timeStampSec, timeStampnSec});
         }
     }
 }
