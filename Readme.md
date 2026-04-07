@@ -126,8 +126,8 @@ $ source install/setup.bash
 | read_once           | Variables that determine whether to read the pcap file repeatedly or once | 0             |
 | read_fast           | Adjust the pcap read speed more faster                       | 1             |
 | calibration         | Set whether to use calibration(X, Y, Z, Roll, Pitch, Yaw) or not<br />False -- unused slam offset <br />True -- used slam offset<br />  ※ Calibration values can be set in the 'autol_driver/params/slam_offset.yaml' file | False         |
-| horizon_cal_file_fath| Set the azimuth calibration file path (G192 only)           | 1             |
-| vertical_cal_file_fath| Set the vertical angle calibration file path (G192 only)   | 1             |
+| horizon_cal_file_path| Set the azimuth calibration file path (G192 only)           | " "           |
+| vertical_cal_file_path| Set the vertical angle calibration file path (G192 only)   | " "           |
 
 ```python
 #Example of setting the parameters of driver launch file 

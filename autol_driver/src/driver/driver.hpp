@@ -88,8 +88,8 @@ void AutolDriver::Init()
   node_.declare_parameter("read_fast", rclcpp::ParameterValue(0));
   node_.declare_parameter("calibration", rclcpp::ParameterValue(true));
 
-  node_.declare_parameter("horizon_cal_file_fath", rclcpp::ParameterValue(""));
-  node_.declare_parameter("vertical_cal_file_fath", rclcpp::ParameterValue(""));
+  node_.declare_parameter("horizon_cal_file_path", rclcpp::ParameterValue(""));
+  node_.declare_parameter("vertical_cal_file_path", rclcpp::ParameterValue(""));
 
   // get Parameter to Config
   node_.get_parameter("manufacture_id", manufacture_id);
@@ -119,8 +119,8 @@ void AutolDriver::Init()
   node_.get_parameter("read_fast", lidar_config_.read_fast);
   node_.get_parameter("calibration", lidar_config_.calibration);
 
-  node_.get_parameter("horizon_cal_file_fath", lidar_config_.horizon_cal_file_fath);
-  node_.get_parameter("vertical_cal_file_fath", lidar_config_.vertical_cal_file_fath);
+  node_.get_parameter("horizon_cal_file_path", lidar_config_.horizon_cal_file_path);
+  node_.get_parameter("vertical_cal_file_path", lidar_config_.vertical_cal_file_path);
 
 
   //Set Lidar Configuration

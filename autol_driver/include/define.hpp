@@ -84,8 +84,8 @@ typedef struct
     std::string pcap_path;
     std::vector<int32_t> lidar_port;
 
-    std::string horizon_cal_file_fath;
-    std::string vertical_cal_file_fath;
+    std::string horizon_cal_file_path;
+    std::string vertical_cal_file_path;
 
 } LIDAR_CONFIG;
 

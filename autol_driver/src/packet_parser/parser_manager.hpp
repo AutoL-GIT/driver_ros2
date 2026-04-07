@@ -197,7 +197,7 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
 
     if(lidar_config_.model_id == ModelId::G192)
     {
-        calibration_.ReadCalFiles(lidar_config_.horizon_cal_file_fath, lidar_config_.vertical_cal_file_fath, lidar_idx);        
+        calibration_.ReadCalFiles(lidar_config_.horizon_cal_file_path, lidar_config_.vertical_cal_file_path, lidar_idx);        
     }
 }
 
