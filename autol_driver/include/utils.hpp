@@ -30,10 +30,13 @@ public:
 
     int num_lidars_;
     std::vector<SlamOffset> lidar_slamoffset_corrections;
+    double M_H2[4][192][683] = { 0, };
+    double M_V2[4][192][683] = { 0, };
 
 public:
     Calibration();
     void ReadSlamOffset(std::string file, int num_lidars);
+    void ReadCalFiles(std::string horizontalFile, std::string VerticalFile, int32_t lidar_idx);
 
 private:
 };
@@ -136,6 +139,67 @@ void Calibration::ReadSlamOffset(std::string file, int num_lidars)
     }
     fin.close();
 }
+
+void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalFile, int32_t lidar_idx)
+{
+    auto parseCSV = [](const std::string& filename, double calArray[4][192][683])
+    {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Failed to open file: " << filename << std::endl;
+            return;
+        }
+
+        int mirror_num = -1;
+        std::string line;
+
+        while (std::getline(file, line)) {
+            std::istringstream ss(line);
+            std::string value;
+
+            int col = 0;
+            int cur_ch = -1; // ä�� ��ȣ
+
+            while (std::getline(ss, value, ',')) {
+                if (col == 0) {
+                    // ù ��° ���� �������? �ʰ� ������ ���� ó��
+                    if (!value.empty() && std::all_of(value.begin(), value.end(), ::isdigit)) {
+                        cur_ch = std::stoi(value);
+                    }
+                    else {
+                        mirror_num++;
+                        if (mirror_num >= 4) {
+                            std::cerr << "Error: mirror_num exceeds limit (4 mirrors allowed)." << std::endl;
+                            return;
+                        }
+                        continue; // ä�� ��ȣ�� �߸��Ǿ����Ƿ� ���� �ٷ� �Ѿ
+                    }
+                }
+                else {
+                    // �迭�� ������ ���� (ä�� ��ȣ�� ��ȿ�� ����)
+                    if (mirror_num >= 0 && mirror_num < 4 && cur_ch >= 0 && cur_ch < 192 && col <= 682) {
+                        try {
+                            calArray[mirror_num][cur_ch][col - 1] = std::stod(value);
+                        }
+                        catch (const std::invalid_argument&) {
+                            std::cerr << "Invalid value at mirror " << mirror_num
+                                << ", channel " << cur_ch << ", column " << col
+                                << ": '" << value << "' cannot be converted to a double." << std::endl;
+                            calArray[mirror_num][cur_ch][col - 1] = 0.0;  // �⺻�� ����
+                        }
+                    }
+                }
+                ++col;
+            }
+        }
+
+        file.close();
+    };
+
+    parseCSV(horizontalFile, M_H2);
+    parseCSV(VerticalFile, M_V2);
+}
+
 
 void ApplyRPY(float &pos_x, float &pos_y, float &pos_z, int lidar_id, std::vector<SlamOffset> &rpy)
 {

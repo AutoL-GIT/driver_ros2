@@ -66,6 +66,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/AutolG32V2Frame.msg"
   "msg/AutolS56Packet.msg"
   "msg/AutolS56Frame.msg"
+  "msg/AutolG192Packet.msg"
+  "msg/AutolG192Frame.msg"
   DEPENDENCIES builtin_interfaces std_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)             

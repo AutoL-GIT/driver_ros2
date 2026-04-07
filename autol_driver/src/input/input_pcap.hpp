@@ -6,6 +6,7 @@
 #include "packet_parser/g32_parser.hpp"
 #include "packet_parser/g32_v2_parser.hpp"
 #include "packet_parser/s56_parser.hpp"
+#include "packet_parser/g192_parser.hpp"
 
 class InputPcap : public InputManager
 {
@@ -27,8 +28,6 @@ public:
 
 void InputPcap::StartRecvData()
 {
-    //lidar_ctrl_ptr_ = new G32Parser();
-    //Assign parse function 
     switch (lidar_config_.model_id)
     {
     case ModelId::G32:
@@ -50,9 +49,15 @@ void InputPcap::StartRecvData()
         lidar_ctrl_ptr_->packet_s56_ctrl_callback_ = packet_s56_callback_;
         lidar_ctrl_ptr_->pcd_callback_ = pcd_callback_;
         break;
+    case ModelId::G192:
+        lidar_ctrl_ptr_ = new G192Parser();
+        lidar_ctrl_ptr_->packet_g192_ctrl_callback_ = packet_g192_callback_;
+        lidar_ctrl_ptr_->pcd_callback_ = pcd_callback_;
+        break;
     default:
         break;
     }
+
     //Start parser thread 
     lidar_ctrl_ptr_->StartParserThread(lidar_config_, lidar_idx_);
     //Get node address

@@ -44,7 +44,7 @@ public:
     unsigned int fov_data_arr_count_ = 0;
     float top_bottom_offset;
     int data_points_size_;
-    float vertical_angle_arr_[56];
+    float vertical_angle_arr_[192];
     float vert_angle = 10;
     unsigned int frame_rate = 10;
     unsigned int vertical_angle = 10;
@@ -99,6 +99,7 @@ public:
         parser->ChangePacketsToFov();
         return nullptr;
     }
+
     void SetVerticalAngle(ModelId device_id, float angle)
     {
         switch (device_id)
@@ -119,13 +120,22 @@ public:
         break;
         case ModelId::S56:
         {            
-            // int num_of_channel = 56;
-            // //std::cout << num_of_channel << std::endl;
-            // for (size_t i = 0; i < num_of_channel; i++)
-            // {
-            //     vertical_angle_arr_[i] = -15 + ((float)30 / (56 - 1)) * i;
-            // }
             int num_of_channel = 56;
+
+            double vert_resolution = angle / (num_of_channel - 1);
+
+            float angle_start = -angle / 2;
+
+            for (size_t i = 0; i < num_of_channel; i++)
+            {
+                vertical_angle_arr_[i] = angle_start + vert_resolution * i;
+            }
+        }
+        break;
+        case ModelId::G192:
+        {            
+            float angle = 25;
+            int num_of_channel = 192;
 
             double vert_resolution = angle / (num_of_channel - 1);
 
@@ -151,27 +161,25 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     input_type_ = lidar_config.input_type;
     lidar_id_ = lidar_config_.model_id;
     port_num_ = lidar_config_.lidar_port[lidar_idx];
-    pcap_path_ = lidar_config.pcap_path;
+    pcap_path_ = lidar_config.pcap_path;    
     lidar_idx_ = lidar_idx;
     stop_udp_thread_ = false;
     stop_packets2fov_thread_ = false;
+    
 
-    // Declare thread function for receive packet data through pcap or socket
-    //udp_thread = std::thread(&Parser::ReceiveThreadDowork, this);
-    // packets_to_fov_thread = std::thread(&Parser::ChangePacketsToFov, this);
-
+    // Read packets from a PCAP file
     struct sched_param param1;
     int policy= SCHED_FIFO;
     param1.sched_priority = sched_get_priority_max(policy);
     pthread_create(&udp_thread_p, nullptr, &Parser<LidarUdpPacket>::ThreadEntryPoint, this);
     pthread_setschedparam(udp_thread_p, policy, &param1);
 
+    // parsing packet
     struct sched_param param2;
     int policy2= SCHED_FIFO;
     param2.sched_priority = sched_get_priority_max(policy2);
     pthread_create(&packets_to_fov_thread_p, nullptr, &Parser<LidarUdpPacket>::ThreadEntryPoint2, this);
     pthread_setschedparam(packets_to_fov_thread_p, policy2, &param2);
-
 
     // Set calibration config
     std::filesystem::path currentPath = std::filesystem::current_path();
@@ -186,6 +194,11 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
    
     // Read slam_offset.yaml file
     calibration_.ReadSlamOffset(fullPath.string(), lidar_config_.lidar_count);
+
+    if(lidar_config_.model_id == ModelId::G192)
+    {
+        calibration_.ReadCalFiles(lidar_config_.horizon_cal_file_fath, lidar_config_.vertical_cal_file_fath, lidar_idx);        
+    }
 }
 
 // Stop parser thread
@@ -279,7 +292,7 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
     }
     //2. Receive packet data 
     while (stop_udp_thread_ == false)
-    {
+    {        
         //AutoLG32UdpPacket lidar_udp_packet;
         LidarUdpPacket lidar_udp_packet;
         if (input_type_ == InputType::UDP)
@@ -328,22 +341,30 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         
         lidar_udp_packet.DeSerializeUdpPacket(buffer);
         //3. accumulate packet data to packet_queue 
-        //ChangePacketsToFovSyn(lidar_udp_packet, lidar_idx_);
-        //queue_mutex.lock();
-        unique_lock<mutex> lock(mtx);
-        if (packet_queue.size() < 200)
-        {                
-            packet_queue.push(lidar_udp_packet);                
+        if(lidar_id_ == ModelId::G192)
+        {
+            queue_mutex.lock();
+            //if (packet_queue.size() < 1000)
+            {                
+                packet_queue.push(lidar_udp_packet);                
+            }
+            queue_mutex.unlock();
         }
-        //queue_mutex.unlock();
-        cv.notify_one();
-
+        else
+        {
+            unique_lock<mutex> lock(mtx);
+            //if (packet_queue.size() < 1000)
+            {                
+                packet_queue.push(lidar_udp_packet);                
+            }
+            cv.notify_one();
+        }
     }
+
     if (input_type_ == InputType::UDP)
     {
         udp_socket_.CloseSocket();
     }
-
     else if (input_type_ == InputType::PCAP && closeFlag == 0)
     {
         pcap_close(pcap_);

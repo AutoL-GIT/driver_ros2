@@ -85,8 +85,8 @@ typedef struct
 	uint16_t distance_resolution;
 	uint8_t channel_azimuth_mode;
 	uint8_t channel_azimuth_number;
-	uint8_t utc_time[6];
-	uint32_t time_stamp;
+	uint8_t utc_time[6]; // ~sec	
+	uint32_t time_stamp; // nanosec
 	int16_t vertical_resolution;
 	int16_t horizontal_resolution;
 }S56Header;							// total : 28 byte

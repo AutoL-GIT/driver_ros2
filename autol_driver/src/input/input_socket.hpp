@@ -7,6 +7,8 @@
 #include "packet_parser/g32_parser.hpp"
 #include "packet_parser/g32_v2_parser.hpp"
 #include "packet_parser/s56_parser.hpp"
+#include "packet_parser/g192_parser.hpp"
+
 #define UDP_PORT 5001
 
 class InputSocket : public InputManager
@@ -49,6 +51,12 @@ void InputSocket::StartRecvData()
         lidar_ctrl_ptr_ = new S56Parser();
         lidar_ctrl_ptr_->packet_s56_ctrl_callback_ = packet_s56_callback_;
         lidar_ctrl_ptr_->pcd_callback_= pcd_callback_;
+        break;
+    case ModelId::G192:
+        lidar_ctrl_ptr_ = new G192Parser();
+        lidar_ctrl_ptr_->packet_g192_ctrl_callback_ = packet_g192_callback_;
+        lidar_ctrl_ptr_->pcd_callback_= pcd_callback_;
+        //lidar_ctrl_ptr_->ApplyCalFiles();
         break;
     default:
 
