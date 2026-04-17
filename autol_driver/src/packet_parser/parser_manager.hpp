@@ -344,7 +344,7 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         if(lidar_id_ == ModelId::G192)
         {
             queue_mutex.lock();
-            //if (packet_queue.size() < 1000)
+            if (packet_queue.size() < 1000)
             {                
                 packet_queue.push(lidar_udp_packet);                
             }
@@ -353,7 +353,7 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         else
         {
             unique_lock<mutex> lock(mtx);
-            //if (packet_queue.size() < 1000)
+            if (packet_queue.size() < 1000)
             {                
                 packet_queue.push(lidar_udp_packet);                
             }

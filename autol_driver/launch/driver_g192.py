@@ -26,8 +26,8 @@ packet_per_frame = 0
 read_once = 0
 read_fast = 1
 calibration = True
-horizon_cal_file_path = '/home/autol/data/cal_files_g192/g192_horizontal_angle_calibration.csv'
-vertical_cal_file_path = '/home/autol/data/cal_files_g192/g192_vertical_angle_calibration.csv'
+horizon_cal_file_fath = ''
+vertical_cal_file_fath = ''
 
 rviz_config=get_package_share_directory('autol_driver')+'/rviz/pointcloud2_config.rviz'
  
@@ -54,8 +54,8 @@ autol_node_parameters = [
     {"read_fast": read_fast},
   #calibration
     {"calibration" : calibration},    
-    {"horizon_cal_file_path" : horizon_cal_file_path},
-    {"vertical_cal_file_path" : vertical_cal_file_path},  
+    {"horizon_cal_file_fath" : horizon_cal_file_fath},
+    {"vertical_cal_file_fath" : vertical_cal_file_fath},  
 ]
 
 def generate_launch_description():
