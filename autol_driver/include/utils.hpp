@@ -30,8 +30,8 @@ public:
 
     int num_lidars_;
     std::vector<SlamOffset> lidar_slamoffset_corrections;
-    double M_H2[4][192][683] = { 0, };
-    double M_V2[4][192][683] = { 0, };
+    double M_H2[4][192][781] = { 0, };
+    double M_V2[4][192][781] = { 0, };
 
 public:
     Calibration();
@@ -142,7 +142,7 @@ void Calibration::ReadSlamOffset(std::string file, int num_lidars)
 
 void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalFile, int32_t lidar_idx)
 {
-    auto parseCSV = [](const std::string& filename, double calArray[4][192][683])
+    auto parseCSV = [](const std::string& filename, double calArray[4][192][781])
     {
         std::ifstream file(filename);
         if (!file.is_open()) {
@@ -177,7 +177,7 @@ void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalF
                 }
                 else {
                     // �迭�� ������ ���� (ä�� ��ȣ�� ��ȿ�� ����)
-                    if (mirror_num >= 0 && mirror_num < 4 && cur_ch >= 0 && cur_ch < 192 && col <= 682) {
+                    if (mirror_num >= 0 && mirror_num < 4 && cur_ch >= 0 && cur_ch < 192 && col <= 781) {
                         try {
                             calArray[mirror_num][cur_ch][col - 1] = std::stod(value);
                         }
@@ -203,6 +203,9 @@ void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalF
 
 void ApplyRPY(float &pos_x, float &pos_y, float &pos_z, int lidar_id, std::vector<SlamOffset> &rpy)
 {
+    if(rpy.size() == 0)
+        return;
+        
     float rotated_x = 0, rotated_y = 0, rotated_z = 0;
     float angle = rpy[lidar_id].roll * PI / 180.;
     rotated_y = pos_y * cos(angle) - pos_z * sin(angle);

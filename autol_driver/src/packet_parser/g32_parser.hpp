@@ -196,7 +196,7 @@ void G32Parser::ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t
             // calibration
             if (lidar_config_.calibration == true)
             {
-                ApplyRPY(pos_x, pos_y, pos_z, lidar_idx_, calibration_.lidar_slamoffset_corrections);
+                //ApplyRPY(pos_x, pos_y, pos_z, lidar_idx_, calibration_.lidar_slamoffset_corrections);
             }
             if(fov_data_set_t[i].data_points_[j].distance_ > 0)
                 pcd_data.push_back({pos_x, pos_y, pos_z, intensity, (uint16_t)j, timestamp});

@@ -118,7 +118,6 @@ void AutolDriver::Init()
   node_.get_parameter("read_once", lidar_config_.read_once);
   node_.get_parameter("read_fast", lidar_config_.read_fast);
   node_.get_parameter("calibration", lidar_config_.calibration);
-
   node_.get_parameter("horizon_cal_file_path", lidar_config_.horizon_cal_file_path);
   node_.get_parameter("vertical_cal_file_path", lidar_config_.vertical_cal_file_path);
 
@@ -157,7 +156,7 @@ void AutolDriver::Init()
     lidar_config_.model_id = ModelId::G192;
     if(lidar_config_.packet_per_frame  == 0)
     {
-      lidar_config_.packet_per_frame = 683;
+      lidar_config_.packet_per_frame = 781;
     }
   }
   else
