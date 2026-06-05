@@ -88,6 +88,7 @@ typedef struct
     std::string vertical_cal_file_path;
 
     bool is_publisher_recreated_per_frame;
+    bool is_print_debug_msg;
 
 } LIDAR_CONFIG;
 

@@ -28,6 +28,7 @@ read_fast = 1
 calibration = True
 
 is_publisher_recreated_per_frame = False
+is_print_debug_msg = False
 
 rviz_config=get_package_share_directory('autol_driver')+'/rviz/pointcloud2_config.rviz'
  
@@ -56,6 +57,7 @@ autol_node_parameters = [
     {"calibration" : calibration},
   # ROS2 Setting
     {"is_publisher_recreated_per_frame" : is_publisher_recreated_per_frame},
+    {"is_print_debug_msg" : is_print_debug_msg},   
 ]
 
 def generate_launch_description():

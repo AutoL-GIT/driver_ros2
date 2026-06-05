@@ -52,7 +52,7 @@ private:
   //point cloud msg
   sensor_msgs::msg::PointCloud2 ros_msg_arr_[MAX_NUM_LIDAR];
   mutex publish_mutex;
-  std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
+  std::chrono::steady_clock::time_point last_time;
 };
 
 AutolDriver::AutolDriver(const rclcpp::NodeOptions &node_options)
@@ -91,7 +91,8 @@ void AutolDriver::Init()
   node_.declare_parameter("horizon_cal_file_path", rclcpp::ParameterValue(""));
   node_.declare_parameter("vertical_cal_file_path", rclcpp::ParameterValue(""));
 
-  node_.declare_parameter("is_publisher_recreated_per_frame", rclcpp::ParameterValue(true));
+  node_.declare_parameter("is_publisher_recreated_per_frame", rclcpp::ParameterValue(false));
+  node_.declare_parameter("is_print_debug_msg", rclcpp::ParameterValue(false));
 
   // get Parameter to Config
   node_.get_parameter("manufacture_id", manufacture_id);
@@ -123,6 +124,7 @@ void AutolDriver::Init()
   node_.get_parameter("horizon_cal_file_path", lidar_config_.horizon_cal_file_path);
   node_.get_parameter("vertical_cal_file_path", lidar_config_.vertical_cal_file_path);
   node_.get_parameter("is_publisher_recreated_per_frame", lidar_config_.is_publisher_recreated_per_frame);
+  node_.get_parameter("is_print_debug_msg", lidar_config_.is_print_debug_msg);
 
   last_time = std::chrono::steady_clock::now();
   //Set Lidar Configuration
@@ -397,14 +399,13 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
     pub_pcd_[lidar_idx]->publish(std::move(ros_msg_));
   }
 
-  auto cur_time = std::chrono::steady_clock::now();
-
-  double elapsed_ms = std::chrono::duration<double, std::milli>(cur_time - last_time).count();
-
-std::cerr << "frame interval : " << elapsed_ms<< std::endl;
-                            
-
-  last_time = std::chrono::steady_clock::now();
+  if (lidar_config_.is_print_debug_msg == true)
+  {
+    auto cur_time = std::chrono::steady_clock::now();
+    double elapsed_ms = std::chrono::duration<double, std::milli>(cur_time - last_time).count();
+    std::cerr << "frame interval : " << elapsed_ms<< std::endl;                
+    last_time = std::chrono::steady_clock::now();
+  }
 
 
   if(false)
