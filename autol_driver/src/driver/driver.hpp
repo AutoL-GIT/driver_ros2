@@ -91,6 +91,8 @@ void AutolDriver::Init()
   node_.declare_parameter("horizon_cal_file_path", rclcpp::ParameterValue(""));
   node_.declare_parameter("vertical_cal_file_path", rclcpp::ParameterValue(""));
 
+  node_.declare_parameter("is_publisher_recreated_per_frame", rclcpp::ParameterValue(true));
+
   // get Parameter to Config
   node_.get_parameter("manufacture_id", manufacture_id);
   node_.get_parameter("model_id", temp_model_id);
@@ -120,7 +122,7 @@ void AutolDriver::Init()
   node_.get_parameter("calibration", lidar_config_.calibration);
   node_.get_parameter("horizon_cal_file_path", lidar_config_.horizon_cal_file_path);
   node_.get_parameter("vertical_cal_file_path", lidar_config_.vertical_cal_file_path);
-
+  node_.get_parameter("is_publisher_recreated_per_frame", lidar_config_.is_publisher_recreated_per_frame);
 
   //Set Lidar Configuration
   if (manufacture_id == "autol")
@@ -379,20 +381,20 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
 
   ros_msg_.header.frame_id = "autol_lidar";
 
-  if(true)
+  if (lidar_config_.is_publisher_recreated_per_frame == true)
   {
     pub_pcd_[lidar_idx].reset();
     std::ostringstream oss_2;
     oss_2 << "autol_pointcloud_" << lidar_idx + 1;
     std::string poin_cloud = oss_2.str();;
     pub_pcd_[lidar_idx] = node_.create_publisher<sensor_msgs::msg::PointCloud2>(poin_cloud, 10);
-
     pub_pcd_[lidar_idx]->publish(ros_msg_);
   }
   else
   {
     ros_msg_.header.stamp = node_.now();
     pub_pcd_[lidar_idx]->publish(std::move(ros_msg_));
+    std::cerr << "publish 2: " << std::endl;
   }
 
 

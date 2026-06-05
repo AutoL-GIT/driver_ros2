@@ -87,6 +87,8 @@ typedef struct
     std::string horizon_cal_file_path;
     std::string vertical_cal_file_path;
 
+    bool is_publisher_recreated_per_frame;
+
 } LIDAR_CONFIG;
 
 static const int DATABLOCK_SIZE = 24;

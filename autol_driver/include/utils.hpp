@@ -160,7 +160,10 @@ void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalF
             int col = 0;
             int cur_ch = -1; // ä�� ��ȣ
 
-            while (std::getline(ss, value, ',')) {
+            if(line.length() <= 1)
+                continue;
+            while (std::getline(ss, value, ',')) 
+            {
                 if (col == 0) {
                     // ù ��° ���� �������? �ʰ� ������ ���� ó��
                     if (!value.empty() && std::all_of(value.begin(), value.end(), ::isdigit)) {
@@ -168,8 +171,9 @@ void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalF
                     }
                     else {
                         mirror_num++;
+
                         if (mirror_num >= 4) {
-                            std::cerr << "Error: mirror_num exceeds limit (4 mirrors allowed)." << std::endl;
+                            std::cerr << "Error: mirror_num exceeds limit (4 mirrors allowed)." << mirror_num<< std::endl;
                             return;
                         }
                         continue; // ä�� ��ȣ�� �߸��Ǿ����Ƿ� ���� �ٷ� �Ѿ
@@ -192,7 +196,6 @@ void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalF
                 ++col;
             }
         }
-
         file.close();
     };
 

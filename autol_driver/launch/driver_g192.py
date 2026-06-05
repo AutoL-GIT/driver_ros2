@@ -10,7 +10,7 @@ import launch
 manufacture_id = 'autol'
 model_id = 'G192'
 data_format_version = 1
-input_type = 1
+input_type = 2
 
 lidar_count = 1
 lidar_port_1 = 33233
@@ -26,8 +26,10 @@ packet_per_frame = 0
 read_once = 0
 read_fast = 1
 calibration = True
-horizon_cal_file_path = ''
+horizon_cal_file_path = '/home/autol/data/cal_files_g192/g192_horizontal_angle_calibration.csv'
 vertical_cal_file_path = ''
+
+is_publisher_recreated_per_frame = False
 
 rviz_config=get_package_share_directory('autol_driver')+'/rviz/pointcloud2_config.rviz'
  
@@ -37,7 +39,6 @@ autol_node_parameters = [
     {"model_id": model_id},
     {"data_format_version": data_format_version},
     {"input_type" : input_type},
-    
   #Socket Parameter
     {"lidar_count": lidar_count},
     {"lidar_port_1": lidar_port_1},
@@ -56,6 +57,8 @@ autol_node_parameters = [
     {"calibration" : calibration},    
     {"horizon_cal_file_path" : horizon_cal_file_path},
     {"vertical_cal_file_path" : vertical_cal_file_path},  
+  # ROS2 Setting
+    {"is_publisher_recreated_per_frame" : is_publisher_recreated_per_frame},
 ]
 
 def generate_launch_description():

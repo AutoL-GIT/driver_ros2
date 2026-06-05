@@ -27,6 +27,8 @@ read_once = 0
 read_fast = 1
 calibration = True
 
+is_publisher_recreated_per_frame = False
+
 rviz_config=get_package_share_directory('autol_driver')+'/rviz/pointcloud2_config.rviz'
  
 autol_node_parameters = [
@@ -35,7 +37,6 @@ autol_node_parameters = [
     {"model_id": model_id},
     {"data_format_version": data_format_version},
     {"input_type" : input_type},
-    
   #Socket Parameter
     {"lidar_count": lidar_count},
     {"lidar_port_1": lidar_port_1},
@@ -52,6 +53,8 @@ autol_node_parameters = [
     {"read_fast": read_fast},
   #calibration
     {"calibration" : calibration},
+  # ROS2 Setting
+    {"is_publisher_recreated_per_frame" : is_publisher_recreated_per_frame},
 ]
 
 def generate_launch_description():

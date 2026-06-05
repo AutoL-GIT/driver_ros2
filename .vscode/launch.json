@@ -1,7 +1,39 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        {
+            "name": "Debug autol_driver_node",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/install/autol_driver/lib/autol_driver/autol_driver_node",
+            "args": [
+                "--ros-args",
+                "-r", "__node:=autol_lidar_publisher",
+                "-p", "manufacture_id:=autol",
+                "-p", "model_id:=G192",
+                "-p", "data_format_version:=1",
+                "-p", "input_type:=1",
+                "-p", "lidar_count:=1",
+                "-p", "lidar_port_1:=33233",
+                "-p", "lidar_port_2:=33234",
+                "-p", "lidar_port_3:=33235",
+                "-p", "lidar_port_4:=33236",
+                "-p", "lidar_port_5:=33237",
+                "-p", "lidar_port_6:=33238",
+                "-p", "pcap_path:=/home/autol/data/2025-10-15-20-48-38_AutoLG192_Point_Data.pcap",
+                "-p", "frame_rate:=10",
+                "-p", "packet_per_frame:=0",
+                "-p", "read_once:=0",
+                "-p", "read_fast:=1",
+                "-p", "calibration:=true",
+                "-p", "horizon_cal_file_path:=/home/autol/data/cal_files_g192/g192_horizontal_angle_calibration.csv",
+                "-p", "vertical_cal_file_path:=/home/autol/data/cal_files_g192/g192_horizontal_angle_calibration.csv"
+            ],
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "stopAtEntry": false,
+            "externalConsole": false
+        }
+    ]
 }
