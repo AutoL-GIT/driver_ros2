@@ -52,7 +52,7 @@ private:
   //point cloud msg
   sensor_msgs::msg::PointCloud2 ros_msg_arr_[MAX_NUM_LIDAR];
   mutex publish_mutex;
-
+  std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
 };
 
 AutolDriver::AutolDriver(const rclcpp::NodeOptions &node_options)
@@ -124,6 +124,7 @@ void AutolDriver::Init()
   node_.get_parameter("vertical_cal_file_path", lidar_config_.vertical_cal_file_path);
   node_.get_parameter("is_publisher_recreated_per_frame", lidar_config_.is_publisher_recreated_per_frame);
 
+  last_time = std::chrono::steady_clock::now();
   //Set Lidar Configuration
   if (manufacture_id == "autol")
   {
@@ -395,6 +396,15 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
     ros_msg_.header.stamp = node_.now();
     pub_pcd_[lidar_idx]->publish(std::move(ros_msg_));
   }
+
+  auto cur_time = std::chrono::steady_clock::now();
+
+  double elapsed_ms = std::chrono::duration<double, std::milli>(cur_time - last_time).count();
+
+std::cerr << "frame interval : " << elapsed_ms<< std::endl;
+                            
+
+  last_time = std::chrono::steady_clock::now();
 
 
   if(false)

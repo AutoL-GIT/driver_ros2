@@ -184,9 +184,6 @@ void Calibration::ReadCalFiles(std::string horizontalFile, std::string VerticalF
                     if (mirror_num >= 0 && mirror_num < 4 && cur_ch >= 0 && cur_ch < 192 && col <= 781) {
                         try {
                             calArray[mirror_num][cur_ch][col - 1] = std::stod(value);
-                            // if(col < 500)
-                            //     calArray[mirror_num][cur_ch][col - 1] = 15;
-
                         }
                         catch (const std::invalid_argument&) {
                             std::cerr << "Invalid value at mirror " << mirror_num
