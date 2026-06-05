@@ -184,12 +184,17 @@ void G192Parser::ChangeFovToPcd(std::vector<AutoLG192FovDataPointTmp> &data_poin
     int channelNum = 0;
     double timestamp = 0;
 
+
+
     for (int32_t i = 0; i < (int32_t)data_points.size(); i++)
     {
          if(data_points[i].distance_ > 0)
          {
             int azimuthIdx = i / (192 * 2);
             int channelIdx = (i % (192 * 2) / 2);
+
+			// std::cerr << "Debug 1 " << azimuthIdx << std::endl;
+			// std::cerr << "Debug 2 " << data_points[i].azimuth_ << std::endl;
 
             double azimthOffset = calibration_.M_H2[data_points[i].mirror_number][channelIdx][azimuthIdx];	
             double channelOffset = calibration_.M_V2[data_points[i].mirror_number][channelIdx][azimuthIdx];	
@@ -207,7 +212,6 @@ void G192Parser::ChangeFovToPcd(std::vector<AutoLG192FovDataPointTmp> &data_poin
             {
                 ApplyRPY(pos_x, pos_y, pos_z, lidar_idx_, calibration_.lidar_slamoffset_corrections);
             }
-            
             pcd_data.push_back({pos_x, pos_y, pos_z, intensity, channelNum, timestamp});
         }
     }

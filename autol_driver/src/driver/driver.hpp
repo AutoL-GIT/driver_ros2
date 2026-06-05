@@ -394,7 +394,6 @@ void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t li
   {
     ros_msg_.header.stamp = node_.now();
     pub_pcd_[lidar_idx]->publish(std::move(ros_msg_));
-    std::cerr << "publish 2: " << std::endl;
   }
 
 
