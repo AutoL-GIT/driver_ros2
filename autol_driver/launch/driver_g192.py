@@ -10,7 +10,7 @@ import launch
 manufacture_id = 'autol'
 model_id = 'G192'
 data_format_version = 1
-input_type = 2
+input_type = 1
 
 lidar_count = 1
 lidar_port_1 = 33233
@@ -20,7 +20,7 @@ lidar_port_4 = 33236
 lidar_port_5 = 33237
 lidar_port_6 = 33238
 
-pcap_path = '/home/autol/data/2025-10-15-20-48-38_AutoLG192_Point_Data.pcap'
+pcap_path = '/home/autol/data/2026-07-13-09-28-38_AutoLG192_Point_Data_high_90000lux2.pcap'
 frame_rate = 10
 packet_per_frame = 0
 read_once = 0

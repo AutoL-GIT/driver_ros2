@@ -7,6 +7,7 @@
 #include "packet_parser/g32_v2_parser.hpp"
 #include "packet_parser/s56_parser.hpp"
 #include "packet_parser/g192_parser.hpp"
+#include "packet_parser/s192_parser.hpp"
 
 class InputPcap : public InputManager
 {
@@ -52,6 +53,11 @@ void InputPcap::StartRecvData()
     case ModelId::G192:
         lidar_ctrl_ptr_ = new G192Parser();
         lidar_ctrl_ptr_->packet_g192_ctrl_callback_ = packet_g192_callback_;
+        lidar_ctrl_ptr_->pcd_callback_ = pcd_callback_;
+        break;
+    case ModelId::S192:
+        lidar_ctrl_ptr_ = new S192Parser();
+        lidar_ctrl_ptr_->packet_s192_ctrl_callback_ = packet_s192_callback_;
         lidar_ctrl_ptr_->pcd_callback_ = pcd_callback_;
         break;
     default:

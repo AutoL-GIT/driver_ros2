@@ -11,7 +11,6 @@ public:
     
     bool ProcessPointsData(AutoLG192UdpPacket &packet, int lidar_num, unsigned long long& update_count, bool isFilePlay = false, bool isFistPacket = false);
     void ChangeFovToPcd(std::vector<AutoLG192FovDataPointTmp> &fov_data_set_t, std::vector<DataPoint> &pcd_data);
-    void ApplyCalFiles();
 private:
     uint32_t cur_frame, prev_frame;
     uint32_t debug_cur_frame, debug_prev_frame;
@@ -24,7 +23,7 @@ G192Parser::G192Parser()
     cur_frame = 0;
     prev_frame = 0;
 
-    float angle = 25;
+    float angle = 24.83;
     int num_of_channel = 192;
 
 	double vert_resolution = angle / (num_of_channel - 1);
@@ -35,11 +34,9 @@ G192Parser::G192Parser()
 	{
 		vertical_angle_arr_[i] = angle_start + vert_resolution * i;
 	}
-    ApplyCalFiles();
-}
-void G192Parser::ApplyCalFiles()
-{
 
+	data_points.reserve(192*781*2);
+	pcd_data.reserve(192*781*2);
 }
 
 void G192Parser::ChangePacketsToFov()
@@ -49,10 +46,9 @@ void G192Parser::ChangePacketsToFov()
 	float motor_rpm = 0;
 
     start_vec = std::chrono::system_clock::now();
-	while (stop_udp_thread_ == false)
+	while (stop_packets2fov_thread_ == false)
 	{
 		// Get Packet
-		this_thread::yield();
         end_vec = std::chrono::system_clock::now();
         if ((chrono::duration_cast<chrono::microseconds>(end_vec - start_vec)).count() >= 1000000)
 		{
@@ -63,23 +59,31 @@ void G192Parser::ChangePacketsToFov()
 		}
 		AutoLG192UdpPacket packet = { 0, };
         
-		queue_mutex.lock();
-		if (!packet_queue.empty())
 		{
-			packet = packet_queue.front();
+			std::unique_lock<std::mutex> lock(queue_mutex);
+
+			cv.wait(lock, [this]()
+			{
+				return stop_packets2fov_thread_ || !packet_queue.empty();
+			});
+
+			if (stop_packets2fov_thread_ && packet_queue.empty())
+				break;
+
+			packet = std::move(packet_queue.front());
 			packet_queue.pop();
 		}
-		else
-		{
-			queue_mutex.unlock();
-            usleep(1);
-			continue;
-		}
-		queue_mutex.unlock();
-        ProcessPointsData(packet, 0, update_count);        
+        ProcessPointsData(packet, 0, update_count);    
+
+		// auto process_start = std::chrono::steady_clock::now();
+		// ProcessPointsData(packet, 0, update_count);
+		// auto process_end = std::chrono::steady_clock::now();
+		// auto process_us =std::chrono::duration_cast<std::chrono::microseconds>(process_end - process_start).count();
+		// std::cerr << "ProcessPointsData : "<< static_cast<long long>(process_us) << " " << packet_queue.size() << std::endl;
+		
 	}
 
-	if (stop_udp_thread_ == true)
+	if (stop_packets2fov_thread_ == true)
 	{
 		fps = 0;
 		last_fps = 0;
@@ -110,6 +114,7 @@ bool G192Parser::ProcessPointsData(AutoLG192UdpPacket &packet, int lidar_num, un
 			// if (update_count == MAXULONGLONG)
 			// 	update_count = 1;
 
+			//std::cerr << "==================== Frame Completed"<< endl;
             ChangeFovToPcd(data_points, pcd_data);
             // publish the pcd data
             pcd_callback_(pcd_data, lidar_idx_);
@@ -120,7 +125,7 @@ bool G192Parser::ProcessPointsData(AutoLG192UdpPacket &packet, int lidar_num, un
 			 
 			isFrameCompleted = true;
 
-			// 파일 재생일 경우, 프레임 단위 출력이기 때문에 아래 코드 불필요
+			// Not required for file playback, as data is output frame by frame.
 			if (isFilePlay == false)
 			{
 				double azimuth_resolution = 120.0 / (packet.data_packet.common_header.total_azimuth_count - 1);
@@ -136,6 +141,8 @@ bool G192Parser::ProcessPointsData(AutoLG192UdpPacket &packet, int lidar_num, un
 
 					for (size_t echo_ind = 0; echo_ind < _countof(packet.data_packet.echo); echo_ind++)
 					{
+						if((float)packet.data_packet.echo[echo_ind].point[pixel_ind].distance == 0)
+							continue;
 						data_point.distance_ = (float)packet.data_packet.echo[echo_ind].point[pixel_ind].distance / packet.data_packet.data_header.distance_resolution;
 						data_point.intensity_ = packet.data_packet.echo[echo_ind].point[pixel_ind].intensity;
 						data_point.mirror_number = packet.data_packet.data_header.mirror_number - 1;
@@ -164,6 +171,8 @@ bool G192Parser::ProcessPointsData(AutoLG192UdpPacket &packet, int lidar_num, un
 				}
 				for (size_t echo_ind = 0; echo_ind < _countof(packet.data_packet.echo); echo_ind++)
 				{
+					if((float)packet.data_packet.echo[echo_ind].point[pixel_ind].distance == 0)
+						continue;
 					data_point.distance_ = (float)packet.data_packet.echo[echo_ind].point[pixel_ind].distance / packet.data_packet.data_header.distance_resolution;
 					data_point.intensity_ = packet.data_packet.echo[echo_ind].point[pixel_ind].intensity;
 					data_point.mirror_number = packet.data_packet.data_header.mirror_number - 1;

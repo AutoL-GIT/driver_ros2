@@ -13,6 +13,7 @@ protected:
     std::function<void(const G32V2FrameData_t&, int32_t)> packet_g32_v2_callback_;
     std::function<void(const S56FrameData_t&, int32_t)> packet_s56_callback_;
     std::function<void(const G192FrameData_t&, int32_t)> packet_g192_callback_;
+    std::function<void(const S192FrameData_t&, int32_t)> packet_s192_callback_;
     std::function<void(const PointData&, int32_t)> pcd_callback_;
     //lidar controller class
     LidarController *lidar_ctrl_ptr_;
@@ -29,6 +30,7 @@ public:
     void RegRecvCallback(const std::function<void(const G32V2FrameData_t&, int32_t)>& callback);
     void RegRecvCallback(const std::function<void(const S56FrameData_t&, int32_t)>& callback);
     void RegRecvCallback(const std::function<void(const G192FrameData_t&, int32_t)>& callback);
+    void RegRecvCallback(const std::function<void(const S192FrameData_t&, int32_t)>& callback);
 
     //Assign pcd data callback function
     void RegRecvPcdCallback(const std::function<void(const PointData&, int32_t)>& callback);
@@ -61,7 +63,10 @@ void InputManager::RegRecvCallback(const std::function<void(const G192FrameData_
 {
     packet_g192_callback_ = callback;
 }
-
+void InputManager::RegRecvCallback(const std::function<void(const S192FrameData_t&, int32_t)>& callback)
+{
+    packet_s192_callback_ = callback;
+}
 //Point Cloud Callback
 void InputManager::RegRecvPcdCallback(const std::function<void(const PointData&, int32_t)>& callback)
 {

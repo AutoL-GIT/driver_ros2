@@ -32,6 +32,7 @@ public:
     int port_num_;
     InputType input_type_;
     queue<LidarUdpPacket> packet_queue;
+    
     mutex queue_mutex;
     mutex mtx;
     condition_variable cv;
@@ -172,7 +173,7 @@ void Parser<LidarUdpPacket>::StartParserThread(LIDAR_CONFIG &lidar_config, int32
     int policy= SCHED_FIFO;
     param1.sched_priority = sched_get_priority_max(policy);
     pthread_create(&udp_thread_p, nullptr, &Parser<LidarUdpPacket>::ThreadEntryPoint, this);
-    pthread_setschedparam(udp_thread_p, policy, &param1);
+    //pthread_setschedparam(udp_thread_p, policy, &param1);
 
     // parsing packet
     struct sched_param param2;
@@ -207,6 +208,8 @@ void Parser<LidarUdpPacket>::StopParserThread()
 {
     stop_packets2fov_thread_ = true;
     stop_udp_thread_ = true;
+    
+    cv.notify_all();
     
     pthread_join(udp_thread_p, nullptr);
     pthread_join(packets_to_fov_thread_p, nullptr);
@@ -293,11 +296,12 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
     //2. Receive packet data 
     while (stop_udp_thread_ == false)
     {        
-        //AutoLG32UdpPacket lidar_udp_packet;
+        int packetSize = 0;
         LidarUdpPacket lidar_udp_packet;
         if (input_type_ == InputType::UDP)
         {
             retVal = udp_socket_.RecvFrom(buffer, sizeof(buffer), &from);
+            packetSize = retVal;
         }
         else if (input_type_ == InputType::PCAP)
         {
@@ -319,11 +323,13 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
             }
 
             retVal = pcap_offline_filter(&pcap_packet_filter_, header, pkt_data);
+            packetSize = static_cast<int>(header->caplen) - pcapHeaderSz;
             if (lidar_config_.read_fast == 0)
             {
                 int frame_rate = lidar_config_.frame_rate;
                 int packet_per_frame = lidar_config_.packet_per_frame;
-                
+                                
+
                 usleep((float)1/frame_rate/packet_per_frame * 1000000.0);
             }
         }
@@ -335,20 +341,33 @@ void Parser<LidarUdpPacket>::ReceiveThreadDowork()
         //copy the data memory for data type
         if (pkt_data != NULL && input_type_ == InputType::PCAP)
         {
-            memcpy(buffer, pkt_data + pcapHeaderSz, header->caplen);
+            memcpy(buffer, pkt_data + pcapHeaderSz, packetSize);
             usleep(100); //for thread sync
         }
-        
-        lidar_udp_packet.DeSerializeUdpPacket(buffer);
+
+        lidar_udp_packet.DeSerializeUdpPacket(buffer, packetSize);
         //3. accumulate packet data to packet_queue 
-        if(lidar_id_ == ModelId::G192)
+        if (lidar_id_ == ModelId::G192 || lidar_id_ == ModelId::S192 || lidar_id_ == ModelId::S56)
         {
-            queue_mutex.lock();
-            if (packet_queue.size() < 1000)
-            {                
-                packet_queue.push(lidar_udp_packet);                
+            bool pushed = false;
+            {
+                std::lock_guard<std::mutex> lock(queue_mutex);
+
+                if (packet_queue.size() < 1000)
+                {
+                    packet_queue.push(std::move(lidar_udp_packet));
+                    pushed = true;
+                }
+                else
+                {
+                    std::cerr << "Buffer Overflow, unprocessed packet : "<< packet_queue.size() << std::endl;
+                }
             }
-            queue_mutex.unlock();
+
+            if (pushed)
+            {
+                cv.notify_one();
+            }
         }
         else
         {

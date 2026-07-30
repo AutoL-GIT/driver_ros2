@@ -1,8 +1,6 @@
 #ifndef G192_PACKET_STRUCTRUE_HPP
 #define G192_PACKET_STRUCTRUE_HPP
 
-//#include "define.hpp"
-
 using namespace std;
 
  #pragma pack(push, 1)
@@ -23,7 +21,6 @@ using namespace std;
 		int mirror_number;
 		int channel_number_;
 	}AutoLG192FovDataPointTmp; // 12 bytes
-
 
 	typedef struct
 	{
@@ -175,7 +172,6 @@ using namespace std;
 
 		void AddDataBlockToFovDataSet(vector<AutoLG192FovDataBlock>& fov_data_set, float top_bottom_angle_offset, vector<int>& lidar_id_vector, float vertical_angle_arr_[], unsigned int& fov_data_arr_count_)
 		{
-
 		}
 	};
  #pragma pack(pop)

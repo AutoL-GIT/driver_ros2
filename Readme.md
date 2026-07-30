@@ -101,7 +101,7 @@ $ source install/setup.bash
 
 | launch file name | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
-| driver.py        | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz)<br />3. Path<br />   - autol_driver/driver.py #if you modify this file, you must compile the code<br />   - autol_driver/install/driver.py #if you modify this file, you should not compile the code. but the content does not  apply source code <br />   ※ The driver_g32.py and driver_s56.py files are defined, so you can use them as needed. <br />|
+| driver.py        | 1. Connect to AutoL G32 LiDAR device and Publish UDP Packet format data (autol_frame_data)<br />2. Publish pointcloud2 msg and auto load rviz)<br />3. Path<br />   - autol_driver/driver.py #if you modify this file, you must compile the code<br />   - autol_driver/install/driver.py #if you modify this file, you should not compile the code. but the content does not  apply source code <br />   ※ The driver_g32.py, driver_g192.py, driver_s56.py and driver_s192.py files are defined, so you can use them as needed. <br />|
 
 
 
@@ -278,9 +278,9 @@ void PcdSaver::SavePcdCallBack(const sensor_msgs::msg::PointCloud2::ConstPtr &pc
 ## 8. Supported LiDAR List
 
 - Manufacture id: AutoL / Model Id: G32 
-- Manufacture id: AutoL / Model Id: S56 
 - Manufacture id: AutoL / Model Id: G192 
-
+- Manufacture id: AutoL / Model Id: S56 
+- Manufacture id: AutoL / Model Id: s192 
 - (more types are comming soon...)
 
   

@@ -20,8 +20,8 @@ lidar_port_4 = 5004
 lidar_port_5 = 5005
 lidar_port_6 = 5006
 
-pcap_path = '/home/autol/data/2025-01-03-14-20-58_AutoLS56_Point_Data.pcap'
-frame_rate = 20
+pcap_path = '/home/autol/data/2026-02-27-14-05-22_AutoLS56_Point_Data.pcap'
+frame_rate = 10
 packet_per_frame = 0
 read_once = 0
 read_fast = 1

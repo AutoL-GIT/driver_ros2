@@ -139,8 +139,7 @@ void G32Parser::ChangePacketsToFov()
                                     frame_rate = packet.header_.es_test_info_.frame_rate;
                                     vertical_angle = packet.header_.es_test_info_.vertical_angle;
                                 }
-                                //publish the packet data
-                                //packet_g32_ctrl_callback_(frame_data, lidar_idx_);
+
                                 // packet to pcd 
                                 ChangeFovToPcd(fov_data_set_t, pcd_data);
                                 // publish the pcd data

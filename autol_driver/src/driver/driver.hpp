@@ -25,11 +25,12 @@ public:
   void SendPacketG32V2(const G32V2FrameData_t &autol_frame, int32_t lidar_idx);
   void SendPacketS56(const S56FrameData_t &autol_frame, int32_t lidar_idx);
   void SendPacketG192(const G192FrameData_t &autol_frame, int32_t lidar_idx);
+  void SendPacketS192(const S192FrameData_t &autol_frame, int32_t lidar_idx);
 
   // Used to publish point clouds
   void SendPcdData(const PointData &fov_data_set, int32_t lidar_idx);
 
-  void PcdPublishThreadDowork(const PointData fov_data_set, int32_t lidar_idx);
+  void PcdPublishThreadDowork(const PointData& fov_data_set, int32_t lidar_idx);
 
 protected:
   //Packet Frame Publisher
@@ -37,6 +38,7 @@ protected:
   rclcpp::Publisher<autol_driver::msg::AutolG32V2Frame>::SharedPtr pub_g32_v2_frame_[MAX_NUM_LIDAR];
   rclcpp::Publisher<autol_driver::msg::AutolS56Frame>::SharedPtr pub_s56_frame_[MAX_NUM_LIDAR];
   rclcpp::Publisher<autol_driver::msg::AutolG192Frame>::SharedPtr pub_g192_frame_[MAX_NUM_LIDAR];
+  rclcpp::Publisher<autol_driver::msg::AutolS192Frame>::SharedPtr pub_s192_frame_[MAX_NUM_LIDAR];
   
   //Point Cloud Publisher
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pub_pcd_[MAX_NUM_LIDAR];
@@ -153,7 +155,7 @@ void AutolDriver::Init()
     lidar_config_.model_id = ModelId::S56;
     if(lidar_config_.packet_per_frame  == 0)
     {
-      lidar_config_.packet_per_frame = 192;
+      lidar_config_.packet_per_frame = 112;
     }
   }
   else if (temp_model_id == "G192")
@@ -162,6 +164,15 @@ void AutolDriver::Init()
     if(lidar_config_.packet_per_frame  == 0)
     {
       lidar_config_.packet_per_frame = 781;
+    }
+  }
+  else if (temp_model_id == "S192")
+  {
+    lidar_config_.model_id = ModelId::S192;
+    if(lidar_config_.packet_per_frame  == 0)
+    {
+      lidar_config_.packet_per_frame = 384;
+      //lidar_config_.packet_per_frame = 768;
     }
   }
   else
@@ -211,6 +222,7 @@ void AutolDriver::Init()
     input_ptr->RegRecvCallback(std::bind(&AutolDriver::SendPacketG32V2, this, std::placeholders::_1, std::placeholders::_2));
     input_ptr->RegRecvCallback(std::bind(&AutolDriver::SendPacketS56, this, std::placeholders::_1, std::placeholders::_2));
     input_ptr->RegRecvCallback(std::bind(&AutolDriver::SendPacketG192, this, std::placeholders::_1, std::placeholders::_2));
+    input_ptr->RegRecvCallback(std::bind(&AutolDriver::SendPacketS192, this, std::placeholders::_1, std::placeholders::_2));
 
     // Send Pcd Data Callback Function
     input_ptr->RegRecvPcdCallback(std::bind(&AutolDriver::SendPcdData, this, std::placeholders::_1, std::placeholders::_2));
@@ -238,6 +250,9 @@ void AutolDriver::Init()
       break;
       case ModelId::G192:
         pub_g192_frame_[iIdxI] = node_.create_publisher<autol_driver::msg::AutolG192Frame>(frame_data, 10);
+      break;
+      case ModelId::S192:
+        pub_s192_frame_[iIdxI] = node_.create_publisher<autol_driver::msg::AutolS192Frame>(frame_data, 10);
       break;
     }
     
@@ -316,11 +331,25 @@ inline void AutolDriver::SendPacketG192(const G192FrameData_t &fov_data_set, int
   pub_g192_frame_[lidar_idx]->publish(lidar_frame);
 }
 
+inline void AutolDriver::SendPacketS192(const S192FrameData_t &fov_data_set, int32_t lidar_idx)
+{
+  // Publish S192 Frame Data
+  autol_driver::msg::AutolS192Frame lidar_frame;
+  for (int32_t iIdxI = 0; iIdxI < (int32_t)fov_data_set.size(); iIdxI++)
+  {
+    autol_driver::msg::AutolS192Packet lidar_packet;
+    memcpy(&lidar_packet.data[0], &fov_data_set[iIdxI], sizeof(AutoLS192UdpPacket));
+    lidar_frame.packets.emplace_back(lidar_packet);
+  }
+  lidar_frame.lidar_index = lidar_idx;
+  pub_s192_frame_[lidar_idx]->publish(lidar_frame);
+}
+
 inline void AutolDriver::SendPcdData(const PointData &point_cloud, int32_t lidar_idx)
 {
-  if(true)
+  if(false)
   {
-    std::thread pcd_publish_thread(&AutolDriver::PcdPublishThreadDowork, this, point_cloud, std::ref(lidar_idx));
+    std::thread pcd_publish_thread(&AutolDriver::PcdPublishThreadDowork, this, point_cloud, lidar_idx);
     pcd_publish_thread.detach();
     return;
   }
@@ -330,7 +359,7 @@ inline void AutolDriver::SendPcdData(const PointData &point_cloud, int32_t lidar
   }
 }
 
-void AutolDriver::PcdPublishThreadDowork(const PointData point_cloud, int32_t lidar_idx)
+void AutolDriver::PcdPublishThreadDowork(const PointData& point_cloud, int32_t lidar_idx)
 {
   int32_t offset = 0;
   int32_t fields = 6;

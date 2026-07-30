@@ -8,19 +8,19 @@ import launch
 
 ################### user configure parameters for ros2 start ###################
 manufacture_id = 'autol'
-model_id = 'G32'
-data_format_version = 2
+model_id = 'S192'
+data_format_version = 1
 input_type = 1
 
 lidar_count = 1
-lidar_port_1 = 5001
-lidar_port_2 = 5002
-lidar_port_3 = 5003
-lidar_port_4 = 5004
-lidar_port_5 = 5005
-lidar_port_6 = 5006
+lidar_port_1 = 33233
+lidar_port_2 = 33234
+lidar_port_3 = 33235
+lidar_port_4 = 33236
+lidar_port_5 = 33237
+lidar_port_6 = 33238
 
-pcap_path = '/home/autol/data/AutoL_Point_Data_10.pcap'
+pcap_path = '/home/autol/data/2026-07-30-11-46-30_AutoLS192_Point_Data_Cartesian.pcap'
 frame_rate = 10
 packet_per_frame = 0
 read_once = 0
@@ -53,7 +53,7 @@ autol_node_parameters = [
     {"read_once": read_once},
     {"read_fast": read_fast},
   #calibration
-    {"calibration" : calibration},
+    {"calibration" : calibration},    
   # ROS2 Setting
     {"is_publisher_recreated_per_frame" : is_publisher_recreated_per_frame},
     {"is_print_debug_msg" : is_print_debug_msg},
