@@ -143,14 +143,14 @@ bool S192Parser::ProcessPointsData(AutoLS192UdpPacket &packet, int lidar_num, un
 
 				// Uncomment the necessary data
 				// data_point.distance_m_ = (float)pd.distance * dist_res;
-				 data_point.reflectivity_ = pd.intensity;
+				data_point.reflectivity_ = pd.intensity;
 				// data_point.azimuth_index_ = az;
-				 data_point.channel_index_ = channel;
+				data_point.channel_index_ = channel;
 				// data_point.echo_index_ = ph.echo_number;
-				// data_point.timestamp_ = hdr.timestamp;
-				 data_point.xPos_ = (float)(Z);
-				 data_point.yPos_ = (float)(-Z * rayX);
-				 data_point.zPos_ = (float)(Z * rayY);
+				data_point.timestamp_ = hdr.timestamp;
+				data_point.xPos_ = (float)(Z);
+				data_point.yPos_ = (float)(-Z * rayX);
+				data_point.zPos_ = (float)(Z * rayY);
 				// data_point.vertical_angle_ = atan2(rayY, std::sqrt(1.0 + rayX * rayX)) * 180.0 / PI;			
 				// data_point.azimuth_ = atan2(-rayX, 1.0) * 180.0 / PI;
 
@@ -187,7 +187,7 @@ bool S192Parser::ProcessPointsData(AutoLS192UdpPacket &packet, int lidar_num, un
 				//data_point.azimuth_index_ = base_az + i;
 				data_point.channel_index_ = ph.channel_index;
 				//data_point.echo_index_ = ph.echo_number;
-				//data_point.timestamp_ = hdr.timestamp;
+				data_point.timestamp_ = hdr.timestamp;
 				data_point.xPos_ = r_m * dz;
 				data_point.yPos_ = -r_m * dx;
 				data_point.zPos_ = r_m * dy;
@@ -256,7 +256,7 @@ void S192Parser::ChangeFovToPcd(AutoLS192FovDataPointTmp& data_point, std::vecto
 	float pos_z = data_point.zPos_;
 	float intensity = data_point.reflectivity_;
 	int channelNum = data_point.channel_index_;
-	double timestamp = 0;
+	uint64_t timestamp = data_point.timestamp_;
 
 	//calibration
 	if (lidar_config_.calibration == true)

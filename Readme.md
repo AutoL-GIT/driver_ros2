@@ -280,7 +280,7 @@ void PcdSaver::SavePcdCallBack(const sensor_msgs::msg::PointCloud2::ConstPtr &pc
 - Manufacture id: AutoL / Model Id: G32 
 - Manufacture id: AutoL / Model Id: G192 
 - Manufacture id: AutoL / Model Id: S56 
-- Manufacture id: AutoL / Model Id: s192 
+- Manufacture id: AutoL / Model Id: S192 
 - (more types are comming soon...)
 
   

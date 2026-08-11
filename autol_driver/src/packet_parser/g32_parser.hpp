@@ -179,7 +179,7 @@ void G32Parser::ChangeFovToPcd(std::vector<AutoLG32FovDataBlock> &fov_data_set_t
 {
     const int32_t numOfChannel = 16;
     float intensity = 0;
-    double timestamp = 0;
+    uint64_t timestamp = 0;
 
     for (int32_t i = 0; i < (int32_t)fov_data_set_t.size(); i++)
     {

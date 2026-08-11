@@ -191,7 +191,7 @@ void G192Parser::ChangeFovToPcd(std::vector<AutoLG192FovDataPointTmp> &data_poin
     const int32_t numOfChannel = 16;
     float intensity = 0;
     int channelNum = 0;
-    double timestamp = 0;
+    uint64_t timestamp = 0;
 
 
 

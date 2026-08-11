@@ -185,7 +185,7 @@ void S56Parser::ChangeFovToPcd(AutoLS56FovDataPointTmp& data_point, std::vector<
     {
         float intensity = 0;
         int channelNum = 0;
-        double timestamp = 0;
+        uint64_t timestamp = 0;
         
         float pos_x = 0;
         float pos_y = 0;

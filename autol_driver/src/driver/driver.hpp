@@ -378,6 +378,7 @@ void AutolDriver::PcdPublishThreadDowork(const PointData& point_cloud, int32_t l
   offset = addPointField(ros_msg_, "z", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
   offset = addPointField(ros_msg_, "intensity", 1, sensor_msgs::msg::PointField::FLOAT32, offset);
   offset = addPointField(ros_msg_, "ring", 1, sensor_msgs::msg::PointField::UINT16, offset);
+  offset = addPointField(ros_msg_, "timestamp", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
   offset = addPointField(ros_msg_, "timestampsec", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
   offset = addPointField(ros_msg_, "timestampnsec", 1, sensor_msgs::msg::PointField::FLOAT64, offset);
   ros_msg_.point_step = offset;    
@@ -389,7 +390,8 @@ void AutolDriver::PcdPublishThreadDowork(const PointData& point_cloud, int32_t l
   sensor_msgs::PointCloud2Iterator<float> iter_z_(ros_msg_, "z");
   sensor_msgs::PointCloud2Iterator<float> iter_intensity_(ros_msg_, "intensity");
   sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring_(ros_msg_, "ring");
-  sensor_msgs::PointCloud2Iterator<double> iter_timestamp_(ros_msg_, "timestampsec");
+  sensor_msgs::PointCloud2Iterator<uint64_t> iter_timestamp_(ros_msg_, "timestamp");
+  sensor_msgs::PointCloud2Iterator<double> iter_timestamp_sec_(ros_msg_, "timestampsec");
   sensor_msgs::PointCloud2Iterator<double> iter_timestamp_nsec_(ros_msg_, "timestampnsec");
 
   for (int32_t iIdxJ = 0; iIdxJ < (int32_t)point_cloud.size(); iIdxJ++)
@@ -400,7 +402,8 @@ void AutolDriver::PcdPublishThreadDowork(const PointData& point_cloud, int32_t l
     *iter_z_ = point.z;
     *iter_intensity_ = point.intensity;
     *iter_ring_ = point.ring;
-    *iter_timestamp_ = point.timestamp_sec;
+    *iter_timestamp_ = point.timestamp;
+    *iter_timestamp_sec_ = point.timestamp_sec;
     *iter_timestamp_nsec_ = point.timestamp_nsec;
     ++iter_x_;
     ++iter_y_;
@@ -408,6 +411,7 @@ void AutolDriver::PcdPublishThreadDowork(const PointData& point_cloud, int32_t l
     ++iter_intensity_;
     ++iter_ring_;
     ++iter_timestamp_;
+    ++iter_timestamp_sec_;
     ++iter_timestamp_nsec_;
   }
 

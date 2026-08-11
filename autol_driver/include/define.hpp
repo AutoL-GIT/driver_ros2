@@ -68,7 +68,7 @@ typedef struct
     float_t z;
     float_t intensity;
     uint16_t ring;
-    double timestamp;
+    uint64_t timestamp;
     uint32_t timestamp_sec;
     uint32_t timestamp_nsec;
 } DataPoint;
